@@ -1,0 +1,9 @@
+using DTO;
+
+namespace DALInterface;
+
+public interface IUserDal
+{
+    UserDTO GetUser(string username);
+    bool NewUser(UserDTO userDTO);
+}
