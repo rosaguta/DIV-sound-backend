@@ -1,9 +1,11 @@
 ﻿using System.Data;
 using DALInterface;
 using DTO;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Http;
+using MySql.Data.MySqlClient;
+//using MySqlConnector;
 //    "SqlServer": "Data Source=138.201.52.251,32824;database=DIVSOUND;User ID=root;Password=root;",
 namespace DAL;
 
@@ -20,10 +22,11 @@ public class UserDal : IUserDal
     public UserDTO? GetUser(string uname)
     {
         string? connectionstring = Getconnectionstring();
-        SqlConnection conn = new SqlConnection(connectionstring);
+        MySqlConnection conn = new MySqlConnection(connectionstring);
         conn.Open();
+        //conn.OpenAsync().Wait();
         string query = "SELECT * FROM [user] WHERE [username] = @username";
-        SqlCommand cmd = new SqlCommand(query, conn);
+        MySqlCommand cmd = new MySqlCommand(query, conn);
         DataTable dataTable = new DataTable();
         cmd.Parameters.AddWithValue("@username", uname);
         var data = cmd.ExecuteReader();
@@ -46,11 +49,11 @@ public class UserDal : IUserDal
     public bool NewUser(UserDTO userDto)
     {
         string? connectionstring = Getconnectionstring();
-        SqlConnection conn = new SqlConnection(connectionstring);
+        MySqlConnection conn = new MySqlConnection(connectionstring);
         conn.Open();
         string query = "INSERT INTO [user] (firstname, lastname, username, mail, passhash)" +
                        "VALUES(@Firstname, @Lastname, @Username, @Mail, @Passhash)";
-        using (SqlCommand cmd = new SqlCommand(query, conn))
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
         {
             cmd.Parameters.AddWithValue("@Firstname", userDto.Firstname);
             cmd.Parameters.AddWithValue("@Lastname", userDto.Lastname);
