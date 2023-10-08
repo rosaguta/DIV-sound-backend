@@ -25,7 +25,7 @@ public class UserDal : IUserDal
         MySqlConnection conn = new MySqlConnection(connectionstring);
         conn.Open();
         //conn.OpenAsync().Wait();
-        string query = "SELECT * FROM [user] WHERE [username] = @username";
+        string query = "SELECT * FROM user WHERE username = @username";
         MySqlCommand cmd = new MySqlCommand(query, conn);
         DataTable dataTable = new DataTable();
         cmd.Parameters.AddWithValue("@username", uname);
@@ -51,7 +51,7 @@ public class UserDal : IUserDal
         string? connectionstring = Getconnectionstring();
         MySqlConnection conn = new MySqlConnection(connectionstring);
         conn.Open();
-        string query = "INSERT INTO [user] (firstname, lastname, username, mail, passhash)" +
+        string query = "INSERT INTO user (firstname, lastname, username, mail, passhash)" +
                        "VALUES(@Firstname, @Lastname, @Username, @Mail, @Passhash)";
         using (MySqlCommand cmd = new MySqlCommand(query, conn))
         {
