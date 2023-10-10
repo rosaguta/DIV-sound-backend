@@ -4,15 +4,11 @@ namespace DTO
 {
     public class AudiofileDTO
     {
-        public string filename { get; set; }
-        public float duration { get; set; }
-        public string filetype { get; set; }
-        public string path { get; set; }
-        public IFormFile file { get; set; }
-
-        public AudiofileDTO()
-        {
-            
-        }
+        public int? Id { get; set; }
+        public string? Filename { get; set; }
+        public float? Duration { get; set; }
+        public string? Path { get; set; }
+        public DateTime? Uploaddate { get; set; }
+        
     }
 }

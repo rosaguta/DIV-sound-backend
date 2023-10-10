@@ -8,19 +8,11 @@ namespace Logic;
 
 public class Audiofile
 {
-    public string filename { get; private set; }
-    public float duration { get; private set; }
-    public string filetype { get; private set; }
-    public string path { get; private set; }
-    public IFormFile file { get; private set; }
+    public int? Id { get; set; }
+    public string? Filename { get; set; }
+    public float? Duration { get; set; }
+    public string? Path { get; set; }
+    public DateTime? Uploaddate { get; set; }
 
-    public Audiofile()
-    {
-    }
 
-    // public void UploadFile(AudiofileDTO audiofile)
-    // {
-    //     MetadataHandler.HandleMetadata(audiofile.path);
-    //     
-    // }
 }

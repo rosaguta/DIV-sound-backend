@@ -1,12 +1,9 @@
 ﻿using System.Data;
 using DALInterface;
 using DTO;
-//using System.Data.SqlClient;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
-//using MySqlConnector;
-//    "SqlServer": "Data Source=138.201.52.251,32824;database=DIVSOUND;User ID=root;Password=root;",
 namespace DAL;
 
 public class UserDal : IUserDal
@@ -72,21 +69,18 @@ public class UserDal : IUserDal
         MySqlConnection conn = new MySqlConnection(connectionstring);
         conn.Open();
         string query = "SELECT * FROM user";
-        MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
-        DataTable datatableuser = new DataTable();
-        if (datatableuser.Rows.Count > 0)
+        MySqlCommand command = new MySqlCommand(query, conn);
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
         {
-            for (int i = 0; i < datatableuser.Rows.Count; i++)
-            {
-                UserDTO userdto = new UserDTO();
-                userdto.Id = Convert.ToInt32(datatableuser.Rows[i]["id"]);
-                userdto.Firstname = Convert.ToString(datatableuser.Rows[i]["firstname"]);
-                userdto.Lastname = Convert.ToString(datatableuser.Rows[i]["lastname"]);
-                userdto.Username = Convert.ToString(datatableuser.Rows[i]["username"]);
-                userdto.Passhash = Convert.ToString(datatableuser.Rows[i]["passhash"]);
-                userdto.Mail = Convert.ToString(datatableuser.Rows[i]["mail"]);
-                userdtolist.Add(userdto);
-            }
+            UserDTO userdto = new UserDTO();
+            userdto.Id = reader.GetInt32("id");
+            userdto.Firstname = reader.GetString("firstname");
+            userdto.Lastname = reader.GetString("lastname");
+            userdto.Username = reader.GetString("username");
+            userdto.Mail = reader.GetString("mail");
+            userdto.Passhash = reader.GetString("passhash");
+            userdtolist.Add(userdto);
         }
 
         return userdtolist;

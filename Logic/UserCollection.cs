@@ -21,7 +21,7 @@ public class UserCollection
     public bool Register(string firstname, string lastname, string password, string mail, string username)
     {
         DTO.UserDTO userDTO = new UserDTO();
-        UserDTO? userexists = UserDal.GetUser(mail);
+        UserDTO? userexists = UserDal.GetUser(username);
         if (userexists == null)
         {
             object passhash = EncodePasswordToBase64(password);
@@ -45,6 +45,13 @@ public class UserCollection
 
         return usercollection.Userlist;
     }
+
+    public User GetUser(string username)
+    {
+        UserDTO userdto = UserDal.GetUser(username);
+        User user = userdto.ConvertToLogic();
+        return user;
+    }
     private object EncodePasswordToBase64(string password)
     {
         if (password != null)
@@ -55,5 +62,5 @@ public class UserCollection
         }
         return password;
     }
-
+    
 }

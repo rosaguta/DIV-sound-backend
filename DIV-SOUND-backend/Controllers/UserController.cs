@@ -7,6 +7,7 @@ namespace DIV_SOUND_backend.Controllers;
 public class UserController : ControllerBase
 {
     [HttpPost]
+    [Route("/Users/Register")]
     public IActionResult User([FromBody] User user)
     {
         UserCollection userCollection = new UserCollection();
@@ -20,10 +21,21 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Route("/Users")]
     public List<User> Users()
     {
         UserCollection usercollection = new UserCollection();
         List<User> userlist = usercollection.GetUsers();
         return userlist;
     }
+
+    [HttpGet]
+    [Route("/Users/{username}")]
+    public User User(string username)
+    {
+        UserCollection userCollection = new UserCollection();
+        User user = userCollection.GetUser(username);
+        return user;
+    }
+
 }
