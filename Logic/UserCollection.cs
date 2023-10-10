@@ -33,6 +33,18 @@ public class UserCollection
 
         return false;
     }
+
+    public List<User> GetUsers()
+    {
+        List<UserDTO> userdtolist = UserDal.GetAllUsers();
+        UserCollection usercollection = new UserCollection();
+        foreach (var UserDTO in userdtolist)
+        {
+            usercollection.Userlist.Add(UserDTO.ConvertToLogic());
+        }
+
+        return usercollection.Userlist;
+    }
     private object EncodePasswordToBase64(string password)
     {
         if (password != null)

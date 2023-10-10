@@ -16,6 +16,14 @@ public class UserController : ControllerBase
             return Ok();
         }
 
-        return BadRequest();
+        return BadRequest("User already exists :3");
+    }
+
+    [HttpGet]
+    public List<User> Users()
+    {
+        UserCollection usercollection = new UserCollection();
+        List<User> userlist = usercollection.GetUsers();
+        return userlist;
     }
 }

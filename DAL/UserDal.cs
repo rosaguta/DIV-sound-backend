@@ -63,7 +63,32 @@ public class UserDal : IUserDal
             int rowsaffected = cmd.ExecuteNonQuery();
             return rowsaffected > 0;
         }
+    }
 
+    public List<UserDTO> GetAllUsers()
+    {
+        List<UserDTO> userdtolist = new List<UserDTO>();
+        string? connectionstring = Getconnectionstring();
+        MySqlConnection conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "SELECT * FROM user";
+        MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
+        DataTable datatableuser = new DataTable();
+        if (datatableuser.Rows.Count > 0)
+        {
+            for (int i = 0; i < datatableuser.Rows.Count; i++)
+            {
+                UserDTO userdto = new UserDTO();
+                userdto.Id = Convert.ToInt32(datatableuser.Rows[i]["id"]);
+                userdto.Firstname = Convert.ToString(datatableuser.Rows[i]["firstname"]);
+                userdto.Lastname = Convert.ToString(datatableuser.Rows[i]["lastname"]);
+                userdto.Username = Convert.ToString(datatableuser.Rows[i]["username"]);
+                userdto.Passhash = Convert.ToString(datatableuser.Rows[i]["passhash"]);
+                userdto.Mail = Convert.ToString(datatableuser.Rows[i]["mail"]);
+                userdtolist.Add(userdto);
+            }
+        }
 
+        return userdtolist;
     }
 }
