@@ -12,15 +12,16 @@ public class AudioFileController : ControllerBase
     public string UploadFile(IFormFile formFile)
     {
         AudiofileCollection collection = new AudiofileCollection();
-        collection.
+        string status = collection.UploadFile(formFile);
+        return status;
     }
 
-    [HttpGet]
-    public Audiofile GetFile()
-    {
-        AudiofileCollection collection = new AudiofileCollection();
-        Audiofile file = collection.GetFile();
-        return file;
-    }
+    //[HttpGet]
+    //public Audiofile GetFile()
+    //{
+    //    AudiofileCollection collection = new AudiofileCollection();
+    //    Audiofile file = collection.GetFile();
+    //    return file;
+    //}
 
 }

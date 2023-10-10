@@ -13,5 +13,9 @@ namespace Factory
         {
             return new UserDal();
         }
+        public static IAudiofileDal GetAudiofileDal()
+        {
+            return new AudiofileDal();
+        }
     }
 }

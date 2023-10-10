@@ -1,8 +1,9 @@
 ﻿using DTO;
+using Microsoft.AspNetCore.Http;
 
 namespace DALInterface;
 
 public interface IAudiofileDal
 {
-    void UploadFile(AudiofileDTO file);
+    string UploadFile(IFormFile file);
 }
