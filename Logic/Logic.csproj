@@ -16,7 +16,11 @@
 
 
     <ItemGroup>
+      <PackageReference Include="FFmpeg.AutoGen" Version="6.0.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+      <PackageReference Include="NAudio" Version="2.2.1" />
+      <PackageReference Include="NLayer" Version="1.14.0" />
+      <PackageReference Include="NLayer.NAudioSupport" Version="1.3.0" />
       <PackageReference Include="TagLibSharp" Version="2.3.0" />
     </ItemGroup>
 

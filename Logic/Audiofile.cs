@@ -12,7 +12,9 @@ public class Audiofile
     public string? Filename { get; set; }
     public float? Duration { get; set; }
     public string? Path { get; set; }
-    public DateTime? Uploaddate { get; set; }
+    public TimeSpan? Uploaddate { get; set; }
+    public int Uploaderid { get; set; }
+    public string url { get; set; }
 
 
 }

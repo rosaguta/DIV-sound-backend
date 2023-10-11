@@ -1,6 +1,14 @@
 using System.Net;
 using DALInterface;
 using Microsoft.AspNetCore.Http;
+using DALInterface;
+using DTO;
+using FFmpeg.AutoGen;
+using Google.Protobuf.WellKnownTypes;
+using Logic.Mapper;
+using NLayer.NAudioSupport;
+using TagLib;
+using TagLib.Mpeg;
 
 namespace Logic;
 
@@ -15,12 +23,29 @@ public class AudiofileCollection
         audiofileDal =  Factory.Factory.GetAudiofileDal();
     }
 
-    public string UploadFile(IFormFile file)
+    public string UploadFile(IFormFile file, int uploaderid)
     {
-        string status = audiofileDal.UploadFile(file);
+        
+        AudiofileDTO audioFileDto = new AudiofileDTO();
+        audioFileDto.Filename = file.FileName;
+        audioFileDto.Uploaddate = DateTime.Now;
+        audioFileDto.Duration = null;
+        audioFileDto.Uploaderid = uploaderid;
+        foreach (var header in file.Headers)
+        {
+            Console.WriteLine(header.ToString());
+        }
+        
+        string status = audiofileDal.UploadFile(file, audioFileDto);
         return status;
     }
+
+    private void GetDuration(IFormFile file)
+    {
+    }
+
     
-   
+
+
 
 }

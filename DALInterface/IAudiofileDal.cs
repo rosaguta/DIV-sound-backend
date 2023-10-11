@@ -5,5 +5,7 @@ namespace DALInterface;
 
 public interface IAudiofileDal
 {
-    string UploadFile(IFormFile file);
+    string UploadFile(IFormFile file, AudiofileDTO audiofileDto);
+    void StoreTempFile(IFormFile file);
+    void RemoveTempFile(string remotefilepath);
 }

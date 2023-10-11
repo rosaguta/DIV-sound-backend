@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Logic;
+using Microsoft.Net.Http.Headers;
 
 namespace DIV_SOUND_backend.Controllers;
 
@@ -9,10 +10,12 @@ namespace DIV_SOUND_backend.Controllers;
 public class AudioFileController : ControllerBase
 {
     [HttpPost]
-    public string UploadFile(IFormFile formFile)
+    public string UploadFile(IFormFile formFile, int Uploaderid)
     {
+        
+        
         AudiofileCollection collection = new AudiofileCollection();
-        string status = collection.UploadFile(formFile);
+        string status = collection.UploadFile(formFile, Uploaderid);
         return status;
     }
 
