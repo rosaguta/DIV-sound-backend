@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http;
 using Logic;
 
 namespace DIV_SOUND_backend.Controllers;
@@ -37,5 +39,29 @@ public class UserController : ControllerBase
         User user = userCollection.GetUser(username);
         return user;
     }
+    [HttpGet]
+    [Route("/Users/Login")]
+    public IActionResult Login(string email, string Password)
+    {
+        User user = new User();
+        user = user.Try_GetUser(email);
+        if (user != null)
+        {
+            bool v = user.CheckPassword(Password, user);
+            if (v == false)
+            {
+                return Unauthorized(new LoginResponse { Message = "UnAuthorized", StatusCode = 401, User = null });
+            }
+            else
+            {
+                return Ok(new LoginResponse { Message = "Authorized", StatusCode = 200, User = user });
+            }
+        }
+        else
+        {
+            return Unauthorized(new LoginResponse { Message = "UnAuthorized", StatusCode = 401, User = null });
+        }
+    }
+
 
 }

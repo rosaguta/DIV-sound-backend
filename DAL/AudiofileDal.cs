@@ -114,7 +114,13 @@ namespace DAL
                 return exists;
             }
         }
-
+        //private bool CheckUrlExistance(string urlpath)
+        //{
+        //    string? connectionstring = Getconnectionstring();
+        //    MySqlConnection connection = new MySqlConnection(connectionstring);
+        //    connection.Open();
+        //    string query = "";
+        //}
         private void UploadToMysql(AudiofileDTO audiofiledto)
         {
             string? connectionstring = Getconnectionstring();
