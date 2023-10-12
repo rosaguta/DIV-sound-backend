@@ -85,4 +85,23 @@ public class UserDal : IUserDal
 
         return userdtolist;
     }
+
+    public List<string> GetUserAudioUrls(int id)
+    {
+        List<string> urls = new List<string>();
+        string? connectionstring = Getconnectionstring();
+        MySqlConnection conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "SELECT url FROM audiofile WHERE uploaderid = @Uploaderid";
+        MySqlCommand command = new MySqlCommand(query, conn);
+        command.Parameters.AddWithValue("@Uploaderid", id);
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            string url = reader.GetString("url");
+            urls.Add(url);
+        }
+
+        return urls;
+    }
 }

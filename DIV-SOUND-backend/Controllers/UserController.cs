@@ -63,5 +63,13 @@ public class UserController : ControllerBase
         }
     }
 
+    [HttpGet]
+    [Route("/Users/{id}/Audio")]
+    public List<string> GetUserAudioFiles(int id)
+    {
+        UserCollection userCollection = new UserCollection();
+        List<string> urls = userCollection.GetAudioFiles(id);
+        return urls;
+    }
 
 }

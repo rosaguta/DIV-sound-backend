@@ -52,6 +52,12 @@ public class UserCollection
         User user = userdto.ConvertToLogic();
         return user;
     }
+
+    public List<string> GetAudioFiles(int id)
+    {
+        List<string> urls = UserDal.GetUserAudioUrls(id);
+        return urls;
+    }
     private object EncodePasswordToBase64(string password)
     {
         if (password != null)
