@@ -17,5 +17,10 @@ namespace Factory
         {
             return new AudiofileDal();
         }
+
+        public static IBoardDal GetBoardDal()
+        {
+            return new BoardDal();
+        }
     }
 }

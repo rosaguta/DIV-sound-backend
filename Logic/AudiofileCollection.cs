@@ -31,18 +31,10 @@ public class AudiofileCollection
         audioFileDto.Uploaddate = DateTime.Now;
         audioFileDto.Duration = null;
         audioFileDto.Uploaderid = uploaderid;
-        foreach (var header in file.Headers)
-        {
-            Console.WriteLine(header.ToString());
-        }
-        
         string status = audiofileDal.UploadFile(file, audioFileDto);
         return status;
     }
 
-    private void GetDuration(IFormFile file)
-    {
-    }
 
     
 

@@ -1,144 +1,165 @@
-﻿using DALInterface;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+using DALInterface;
 using DTO;
 using FluentFTP;
 using FluentFTP.Exceptions;
+using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 
-namespace DAL
+namespace DAL;
+
+public class AudiofileDal : IAudiofileDal
 {
-    public class AudiofileDal : IAudiofileDal
+    public string UploadFile(IFormFile file, AudiofileDTO audiofileDto)
     {
-        public string UploadFile(IFormFile file, AudiofileDTO audiofileDto)
+        var ftpserver = GetFTPServer();
+        var ftpusername = GetFTPUsername();
+        var ftppassword = GetFTPPassword();
+        var exists = CheckFolderExistence(audiofileDto.Uploaderid);
+        if (!exists)
         {
-            string ftpserver = GetFTPServer();
-            string ftpusername = GetFTPUsername();
-            string ftppassword = GetFTPPassword();
-            bool exists = CheckFolderExistence(audiofileDto.Uploaderid);
-            if (!exists)
-            {
-                CreateFTPFolder(audiofileDto.Uploaderid);
-                ChangeFolderPermissions(audiofileDto.Uploaderid);
-            }
-
-            string response = SendToFtpServer(ftpserver, ftpusername, ftppassword, file, audiofileDto.Uploaderid);
-            ChangeFilePermissions(file, audiofileDto.Uploaderid);
-            audiofileDto.Path = $"{GetFTPServer()}//files/{audiofileDto.Uploaderid}/{file.FileName}";
-            string input = GetFTPServer();
-            int index = input.IndexOf(":");
-            string ip = input.Substring(index + 1);
-            audiofileDto.url = $"http:{ip}:9998/{audiofileDto.Uploaderid}/{file.FileName}";
-            if (!CheckUrlExistance(audiofileDto.url)) { 
-                UploadToMysql(audiofileDto);
-            }
-            return response;
+            CreateFTPFolder(audiofileDto.Uploaderid);
+            ChangeFolderPermissions(audiofileDto.Uploaderid);
         }
 
-        private string SendToFtpServer(string ftpserver, string FtpUsername, string FtpPassword, IFormFile file,
-            int uploaderid)
-        {
-
-            string remotepath = $"{ftpserver}//files/{uploaderid}/{file.FileName}";
-            var request = (FtpWebRequest)WebRequest.Create(remotepath);
-            request.Method = WebRequestMethods.Ftp.AppendFile;
-            request.Credentials = new NetworkCredential(FtpUsername, FtpPassword);
-            request.UsePassive = true;
-            request.UseBinary = true;
-            request.UsePassive = true;
-
-            using (var stream = request.GetRequestStream())
-            {
-                file.CopyTo(stream);
-            }
-
-            using (var response = (FtpWebResponse)request.GetResponse())
-            {
-                Console.WriteLine($"Upload File Complete. Status: {response.StatusDescription}");
-                return response.StatusDescription;
-
-            }
-        }
-
-        private void CreateFTPFolder(int uploaderid)
-        {
-            using (FtpClient client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
-            {
-                client.Connect();
-                try
-                {
-                    // Execute custom FTP command
-                    client.CreateDirectory($"files/{uploaderid}", true);
-                    // Console.WriteLine("Custom FTP command executed successfully.");
-                }
-                catch (FtpCommandException ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-                finally
-                {
-                    // Disconnect from the FTP server
-                    client.Disconnect();
-
-                }
-            }
-        }
-
-        private bool CheckFolderExistence(int uploaderid)
-        {
-            using (FtpClient client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
-            {
-                bool exists = false;
-                client.Connect();
-                try
-                {
-                    // Execute custom FTP command
-                    exists = client.DirectoryExists($"{GetFTPServer()}//files/{uploaderid}");
-                    // Console.WriteLine("Custom FTP command executed successfully.");
-                }
-                catch (FtpCommandException ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-                finally
-                {
-                    // Disconnect from the FTP server
-                    client.Disconnect();
-
-                }
-
-                return exists;
-            }
-        }
-        private bool CheckUrlExistance(string urlpath)
-        {
-            string? connectionstring = Getconnectionstring();
-            MySqlConnection connection = new MySqlConnection(connectionstring);
-            connection.Open();
-            string query = "SELECT * FROM audiofile WHERE url = @Url";
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.Parameters.AddWithValue("@Url", urlpath);
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    return reader.HasRows;
-                }
-            }
+        var response = SendToFtpServer(ftpserver, ftpusername, ftppassword, file, audiofileDto.Uploaderid);
+        ChangeFilePermissions(file, audiofileDto.Uploaderid);
+        audiofileDto.Path = $"{GetFTPServer()}//files/{audiofileDto.Uploaderid}/{file.FileName}";
+        var input = GetFTPServer();
+        var index = input.IndexOf(":");
+        var ip = input.Substring(index + 1);
+        audiofileDto.url = $"http:{ip}:9998/{audiofileDto.Uploaderid}/{file.FileName}";
+        if (!CheckUrlExistance(audiofileDto.url)) UploadToMysql(audiofileDto);
+        return response;
     }
+
+    public List<AudiofileDTO> GetFiles(int userid)
+    {
+        List<AudiofileDTO> ListFiles = new List<AudiofileDTO>();
+        string? connectionstring = Getconnectionstring();
+        var conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "SELECT url FROM audiofile WHERE uploaderid = @Userid";
+        MySqlCommand command = new MySqlCommand(query, conn);
+        command.Parameters.AddWithValue("@Userid", userid);
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            AudiofileDTO audiofileDto = new AudiofileDTO();
+            audiofileDto.Uploaderid = reader.GetInt32("uploaderid");
+            audiofileDto.Id = reader.GetInt32("id");
+            audiofileDto.Path = reader.GetString("path");
+            audiofileDto.Filename = reader.GetString("name");
+            audiofileDto.url = reader.GetString("url");
+            ListFiles.Add(audiofileDto);
+            
+        }
+
+        return ListFiles ;
+    }
+
+    public List<AudiofileDTO> GetFiles(int userid, int Boardid)
+    {
+        
+    }
+
+    private string SendToFtpServer(string ftpserver, string FtpUsername, string FtpPassword, IFormFile file,
+        int uploaderid)
+    {
+        var remotepath = $"{ftpserver}//files/{uploaderid}/{file.FileName}";
+        var request = (FtpWebRequest)WebRequest.Create(remotepath);
+        request.Method = WebRequestMethods.Ftp.AppendFile;
+        request.Credentials = new NetworkCredential(FtpUsername, FtpPassword);
+        request.UsePassive = true;
+        request.UseBinary = true;
+        request.UsePassive = true;
+
+        using (var stream = request.GetRequestStream())
+        {
+            file.CopyTo(stream);
+        }
+
+        using (var response = (FtpWebResponse)request.GetResponse())
+        {
+            Console.WriteLine($"Upload File Complete. Status: {response.StatusDescription}");
+            return response.StatusDescription;
+        }
+    }
+
+    private void CreateFTPFolder(int uploaderid)
+    {
+        using (var client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
+        {
+            client.Connect();
+            try
+            {
+                // Execute custom FTP command
+                client.CreateDirectory($"files/{uploaderid}", true);
+                // Console.WriteLine("Custom FTP command executed successfully.");
+            }
+            catch (FtpCommandException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                // Disconnect from the FTP server
+                client.Disconnect();
+            }
+        }
+    }
+
+    private bool CheckFolderExistence(int uploaderid)
+    {
+        using (var client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
+        {
+            var exists = false;
+            client.Connect();
+            try
+            {
+                // Execute custom FTP command
+                exists = client.DirectoryExists($"{GetFTPServer()}//files/{uploaderid}");
+                // Console.WriteLine("Custom FTP command executed successfully.");
+            }
+            catch (FtpCommandException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                // Disconnect from the FTP server
+                client.Disconnect();
+            }
+
+            return exists;
+        }
+    }
+
+    private bool CheckUrlExistance(string urlpath)
+    {
+        var connectionstring = Getconnectionstring();
+        var connection = new MySqlConnection(connectionstring);
+        connection.Open();
+        var query = "SELECT * FROM audiofile WHERE url = @Url";
+        using (var cmd = new MySqlCommand(query, connection))
+        {
+            cmd.Parameters.AddWithValue("@Url", urlpath);
+            using (var reader = cmd.ExecuteReader())
+            {
+                return reader.HasRows;
+            }
+        }
+    }
+
     private void UploadToMysql(AudiofileDTO audiofiledto)
     {
-        string? connectionstring = Getconnectionstring();
-        MySqlConnection conn = new MySqlConnection(connectionstring);
+        var connectionstring = Getconnectionstring();
+        var conn = new MySqlConnection(connectionstring);
         conn.Open();
-        string query = "INSERT INTO audiofile (name, path, duration, uploaddate, uploaderid, url)" +
-                       "VALUES(@Name, @Path, @Duration, @Uploaddate, @Uploaderid, @url)";
-        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+        var query = "INSERT INTO audiofile (name, path, duration, uploaddate, uploaderid, url)" +
+                    "VALUES(@Name, @Path, @Duration, @Uploaddate, @Uploaderid, @url)";
+        using (var cmd = new MySqlCommand(query, conn))
         {
             cmd.Parameters.AddWithValue("@Name", audiofiledto.Filename);
             cmd.Parameters.AddWithValue("@Path", audiofiledto.Path);
@@ -152,10 +173,10 @@ namespace DAL
 
     public void StoreTempFile(IFormFile file)
     {
-        string ftpserver = GetFTPServer();
-        string ftpusername = GetFTPUsername();
-        string ftppassword = GetFTPPassword();
-        string remotepath = $"{ftpserver}//files/temp/{file.FileName}";
+        var ftpserver = GetFTPServer();
+        var ftpusername = GetFTPUsername();
+        var ftppassword = GetFTPPassword();
+        var remotepath = $"{ftpserver}//files/temp/{file.FileName}";
         var request = (FtpWebRequest)WebRequest.Create(remotepath);
         request.Method = WebRequestMethods.Ftp.AppendFile;
         request.Credentials = new NetworkCredential(ftpusername, ftppassword);
@@ -172,54 +193,49 @@ namespace DAL
         {
             Console.WriteLine($"Upload File Complete. Status: {response.StatusDescription}");
             // return response.StatusDescription;
-
         }
     }
 
-    public void RemoveTempFile(string remotefilepath)
-    {
-
-    }
 
     private JsonObject GetAppsettings()
     {
-        string? jsonfile = "appsettings.json";
-        JsonObject? jsonObject = (JsonObject?)JsonObject.Parse(File.ReadAllText(jsonfile));
+        var jsonfile = "appsettings.json";
+        var jsonObject = (JsonObject?)JsonNode.Parse(File.ReadAllText(jsonfile));
         return jsonObject;
     }
 
     private string GetFTPServer()
     {
-        JsonObject jsonObject = GetAppsettings();
-        string? ftpserver = (string?)jsonObject["ConnectionStrings"]["ftpServer"];
+        var jsonObject = GetAppsettings();
+        var ftpserver = (string?)jsonObject["ConnectionStrings"]["ftpServer"];
         return ftpserver;
     }
 
     private string GetFTPUsername()
     {
-        JsonObject jsonObject = GetAppsettings();
-        string ftpusername = (string?)jsonObject["ConnectionStrings"]["ftpUsername"];
+        var jsonObject = GetAppsettings();
+        var ftpusername = (string?)jsonObject["ConnectionStrings"]["ftpUsername"];
         return ftpusername;
     }
 
     private string GetFTPPassword()
     {
-        JsonObject jsonObject = GetAppsettings();
-        string ftppassword = (string?)jsonObject["ConnectionStrings"]["ftpPassword"];
+        var jsonObject = GetAppsettings();
+        var ftppassword = (string?)jsonObject["ConnectionStrings"]["ftpPassword"];
         return ftppassword;
     }
 
     private string? Getconnectionstring()
     {
-        string? jsonfile = "appsettings.json";
-        JsonObject? jsonObject = (JsonObject?)JsonObject.Parse(File.ReadAllText(jsonfile));
-        string? sqlservervalue = (string?)jsonObject["ConnectionStrings"]["SqlServer"];
+        var jsonfile = "appsettings.json";
+        var jsonObject = (JsonObject?)JsonNode.Parse(File.ReadAllText(jsonfile));
+        var sqlservervalue = (string?)jsonObject["ConnectionStrings"]["SqlServer"];
         return sqlservervalue;
     }
 
     private void ChangeFilePermissions(IFormFile file, int uploaderid)
     {
-        using (FtpClient client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
+        using (var client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
         {
             client.Connect();
             try
@@ -238,12 +254,11 @@ namespace DAL
                 client.Disconnect();
             }
         }
-
     }
 
     private void ChangeFolderPermissions(int uploaderid)
     {
-        using (FtpClient client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
+        using (var client = new FtpClient(GetFTPServer(), GetFTPUsername(), GetFTPPassword()))
         {
             client.Connect();
             try
@@ -263,5 +278,4 @@ namespace DAL
             }
         }
     }
-}
 }
