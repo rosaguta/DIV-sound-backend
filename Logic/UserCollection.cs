@@ -53,7 +53,7 @@ public class UserCollection
         return user;
     }
 
-    public List<string> GetAudioFiles(int id)
+    public List<string> GetAudioUrls(int id)
     {
         List<string> urls = UserDal.GetUserAudioUrls(id);
         return urls;

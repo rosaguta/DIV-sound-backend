@@ -15,8 +15,9 @@ public class BoardCollection
         _BoardDal = Factory.Factory.GetBoardDal();
     }
 
-    public void CreateBoard(string name)
+    public bool CreateBoard(string name)
     {
-        _BoardDal.CreateBoard(name);
+        bool created =_BoardDal.CreateBoard(name);
+        return created;
     }
 }

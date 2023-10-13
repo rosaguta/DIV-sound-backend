@@ -40,7 +40,7 @@ public class AudiofileDal : IAudiofileDal
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
         conn.Open();
-        string query = "SELECT url FROM audiofile WHERE uploaderid = @Userid";
+        string query = "SELECT * FROM audiofile WHERE uploaderid = @Userid";
         MySqlCommand command = new MySqlCommand(query, conn);
         command.Parameters.AddWithValue("@Userid", userid);
         MySqlDataReader reader = command.ExecuteReader();
@@ -52,6 +52,7 @@ public class AudiofileDal : IAudiofileDal
             audiofileDto.Path = reader.GetString("path");
             audiofileDto.Filename = reader.GetString("name");
             audiofileDto.url = reader.GetString("url");
+            audiofileDto.Uploaddate = reader.GetDateTime("uploaddate");
             ListFiles.Add(audiofileDto);
             
         }
@@ -59,10 +60,10 @@ public class AudiofileDal : IAudiofileDal
         return ListFiles ;
     }
 
-    public List<AudiofileDTO> GetFiles(int userid, int Boardid)
-    {
+    //public List<AudiofileDTO> GetFiles(int userid, int Boardid)
+    //{
         
-    }
+    //}
 
     private string SendToFtpServer(string ftpserver, string FtpUsername, string FtpPassword, IFormFile file,
         int uploaderid)

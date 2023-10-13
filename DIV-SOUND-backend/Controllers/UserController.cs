@@ -65,10 +65,10 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("/Users/{id}/Audio")]
-    public List<string> GetUserAudioFiles(int id)
+    public List<string> GetUserAudioUrls(int id)
     {
         UserCollection userCollection = new UserCollection();
-        List<string> urls = userCollection.GetAudioFiles(id);
+        List<string> urls = userCollection.GetAudioUrls(id);
         return urls;
     }
 

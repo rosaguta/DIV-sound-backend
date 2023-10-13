@@ -16,16 +16,16 @@ public class AudiofileCollection
 {
     public List<Audiofile> Audiofiles { get; set; }
     IAudiofileDal audiofileDal;
-    
+
     public AudiofileCollection()
     {
         Audiofiles = new List<Audiofile>();
-        audiofileDal =  Factory.Factory.GetAudiofileDal();
+        audiofileDal = Factory.Factory.GetAudiofileDal();
     }
 
     public string UploadFile(IFormFile file, int uploaderid)
     {
-        
+
         AudiofileDTO audioFileDto = new AudiofileDTO();
         audioFileDto.Filename = file.FileName;
         audioFileDto.Uploaddate = DateTime.Now;
@@ -35,9 +35,13 @@ public class AudiofileCollection
         return status;
     }
 
-
-    
-
-
-
+    public List<Audiofile> GetAudiofiles(int userid)
+    {
+        List<AudiofileDTO> audiofileDTOs = audiofileDal.GetFiles(userid);
+        foreach (var file in audiofileDTOs)
+        {
+            Audiofiles.Add(file.ConvertToLogic());
+        }
+        return Audiofiles;
+    }
 }

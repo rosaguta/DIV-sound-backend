@@ -10,6 +10,7 @@ namespace DIV_SOUND_backend.Controllers;
 public class AudioFileController : ControllerBase
 {
     [HttpPost]
+    [Route("/AudioFiles")]
     public string UploadFile(IFormFile formFile, int Uploaderid)
     {
         
@@ -19,12 +20,13 @@ public class AudioFileController : ControllerBase
         return status;
     }
 
-    //[HttpGet]
-    //public Audiofile GetFile()
-    //{
-    //    AudiofileCollection collection = new AudiofileCollection();
-    //    Audiofile file = collection.GetFile();
-    //    return file;
-    //}
+    [HttpGet]
+    [Route("/AudioFiles/{userid}")]
+    public List<Audiofile> GetFiles(int userid)
+    {
+        AudiofileCollection collection = new AudiofileCollection();
+        collection.GetAudiofiles(userid);
+        return collection.Audiofiles;
+    }
 
 }

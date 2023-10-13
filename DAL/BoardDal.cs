@@ -6,7 +6,7 @@ namespace DAL;
 
 public class BoardDal : IBoardDal
 {
-    public void CreateBoard(string name)
+    public bool CreateBoard(string name)
     {
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
@@ -15,7 +15,8 @@ public class BoardDal : IBoardDal
         using (var cmd = new MySqlCommand(query, conn))
         {
             cmd.Parameters.AddWithValue("@Name", name);
-            cmd.ExecuteNonQuery();
+            int rowsaffected = cmd.ExecuteNonQuery();
+            return rowsaffected > 0;
         }
     }
 
