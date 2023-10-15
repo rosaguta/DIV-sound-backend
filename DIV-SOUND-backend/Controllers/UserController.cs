@@ -41,10 +41,10 @@ public class UserController : ControllerBase
     }
     [HttpGet]
     [Route("/Users/Login")]
-    public IActionResult Login(string email, string Password)
+    public IActionResult Login(string username, string Password)
     {
         User user = new User();
-        user = user.Try_GetUser(email);
+        user = user.Try_GetUser(username);
         if (user != null)
         {
             bool v = user.CheckPassword(Password, user);
