@@ -21,7 +21,7 @@ public class BoardDal : IBoardDal
         }
     }
 
-    public void AddFileToBoard(int fileid, int boardid, int userid)
+    public bool AddFileToBoard(int fileid, int boardid, int userid)
     {
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
@@ -32,7 +32,8 @@ public class BoardDal : IBoardDal
             cmd.Parameters.AddWithValue("@Userid", userid);
             cmd.Parameters.AddWithValue("@Audioid", fileid);
             cmd.Parameters.AddWithValue("@Boardid", boardid);
-            cmd.ExecuteNonQuery();
+            int rowsaffected = cmd.ExecuteNonQuery();
+            return rowsaffected > 0;
         }
     }
     public List<BoardDTO> GetBoards(int userid)
@@ -77,6 +78,34 @@ public class BoardDal : IBoardDal
             boarddto.AudioList.Add(audiofiledto);
         }
         return boards;
+    }
+    public bool RemoveFileFromBoard(int boardid, int audiofileid, int userid)
+    {
+        string? connectionstring = Getconnectionstring();
+        var conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "DELETE FROM board_user_audio WHERE boardid = @Boardid AND audioid = @Audioid AND userid = @Userid";
+        using (var cmd = new MySqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("@Userid", userid);
+            cmd.Parameters.AddWithValue("@Audioid", audiofileid);
+            cmd.Parameters.AddWithValue("@Boardid", boardid);
+            int rowsaffected = cmd.ExecuteNonQuery();
+            return rowsaffected > 0;
+        }
+    }
+    public bool DeleteBoard(int boardid) 
+    {
+        string? connectionstring = Getconnectionstring();
+        var conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "DELETE FROM board WHERE id = @Boardid";
+        using (var cmd = new MySqlCommand(query,conn))
+        {
+            cmd.Parameters.AddWithValue("@Boardid", boardid);
+            int rowsAffected = cmd.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
     }
     private string? Getconnectionstring()
     {

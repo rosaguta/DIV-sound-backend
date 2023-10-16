@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace DIV_SOUND_backend.Controllers
 {
@@ -27,10 +28,31 @@ namespace DIV_SOUND_backend.Controllers
             return boards.BoardList;
         }
         [HttpPost]
-        [Route("/Boards/{Boardid}")]
-        public void AddFiles(int userid, int boardid, int AudiofileId) 
+        [Route("/Boards/{Boardid}/{AudiofileId}")]
+        public IActionResult AddFiles(int userid, int Boardid, int AudiofileId) 
         {
-
+            BoardCollection boards = new BoardCollection();
+            bool created = boards.AddFilesToBoard(userid, AudiofileId, Boardid);
+            if (created) { return Ok(); }
+            return BadRequest();
+        }
+        [HttpDelete]
+        [Route("/Boards/{boardid}/{audiofileid}")]
+        public IActionResult DeleteFileFromBoard(int boardid, int audiofileid, int userid)
+        {
+            BoardCollection boardCollection = new BoardCollection();
+            bool deleted = boardCollection.RemoveFileFromBoard(boardid, audiofileid, userid);
+            if (deleted) { return Ok(); }
+            return BadRequest();
+        }
+        [HttpDelete]
+        [Route("/Boards/{boardid}")]
+        public IActionResult DeleteBoard(int boardid)
+        {
+            BoardCollection boardCollection = new BoardCollection();
+            bool deleted = boardCollection.DeleteBoard(boardid);
+            if(deleted) { return Ok(); }
+            return BadRequest();
         }
     }
 }
