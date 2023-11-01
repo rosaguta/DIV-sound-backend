@@ -9,7 +9,7 @@ namespace DTO
         public double? Duration { get; set; }
         public string? Path { get; set; }
         public DateTime? Uploaddate { get; set; }
-        public int Uploaderid { get; set; }
+        public int? Uploaderid { get; set; }
         public string? url { get; set; }
 
     }

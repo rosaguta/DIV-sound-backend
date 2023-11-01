@@ -42,41 +42,45 @@ public class BoardDal : IBoardDal
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
         conn.Open();
-        //string query = "SELECT * FROM board WHERE userid = @Uploaderid";
-        string query = "SELECT board.id AS board_id, board.name AS board_name, " +
-            "audiofile.id, audiofile.name, audiofile.duration, audiofile.uploaddate, audiofile.uploaderid, audiofile.url " +
-            "FROM board " +
-            "JOIN user_board_audio ON board.id = user_board_audio.boardid " +
-            "JOIN audiofile ON user_board_audio.audioid = audiofile.id " +
-            "WHERE user_board_audio.userid = @Userid " +
-            "ORDER BY boardid ASC";
+        string query = "SELECT board.id AS board_id, board.name AS board_name, audiofile.id AS id, audiofile.name AS name, audiofile.url AS url, audiofile.uploaderid as uploaderid, audiofile.uploaddate as uploaddate "+
+        "FROM board "+ 
+        "LEFT JOIN user_board_audio ON board.id = user_board_audio.boardid "+
+        "LEFT JOIN audiofile ON user_board_audio.audioid = audiofile.id "+
+        "WHERE board.userid = @Userid "+
+        "ORDER BY board_id ASC"
+
+        ;
         MySqlCommand command = new MySqlCommand(query, conn);
         command.Parameters.AddWithValue("@Userid", userid);
         MySqlDataReader reader = command.ExecuteReader();
         int lastBoardId = -1;
-        BoardDTO boarddto = new BoardDTO();
+        BoardDTO boarddto = null; // Initialize it to null
+
         while (reader.Read())
         {
             int currentBoardId = reader.GetInt32("board_id");
 
-            if (currentBoardId != lastBoardId)
+            if (boarddto == null || currentBoardId != boarddto.Id)
             {
-                boarddto = new BoardDTO();
-                boarddto.name = reader.GetString("board_name");
-                boarddto.Id = currentBoardId;
+                boarddto = new BoardDTO
+                {
+                    name = reader.GetString("board_name"),
+                    Id = currentBoardId,
+                    AudioList = new List<AudiofileDTO>()
+                };
                 boards.Add(boarddto);
-                lastBoardId = currentBoardId;
             }
 
             AudiofileDTO audiofiledto = new AudiofileDTO();
-            audiofiledto.Id = reader.GetInt32("id");
-            audiofiledto.Filename = reader.GetString("name");
-            //audiofiledto.Duration = reader.GetDouble("duration");
-            audiofiledto.Uploaddate = reader.GetDateTime("uploaddate");
-            audiofiledto.Uploaderid = reader.GetInt32("uploaderid");
-            audiofiledto.url = reader.GetString("url");
+            audiofiledto.Id = reader.IsDBNull(reader.GetOrdinal("id")) ? (int?)null : reader.GetInt32("id");
+            audiofiledto.Filename = reader.IsDBNull(reader.GetOrdinal("name")) ? null : reader.GetString("name");
+            audiofiledto.Uploaddate = reader.IsDBNull(reader.GetOrdinal("uploaddate")) ? (DateTime?)null : reader.GetDateTime("uploaddate");
+            audiofiledto.Uploaderid = reader.IsDBNull(reader.GetOrdinal("uploaderid")) ? (int?)null : reader.GetInt32("uploaderid");
+            audiofiledto.url = reader.IsDBNull(reader.GetOrdinal("url")) ? null : reader.GetString("url");
+
             boarddto.AudioList.Add(audiofiledto);
         }
+
         return boards;
     }
     public bool RemoveFileFromBoard(int boardid, int audiofileid, int userid)
@@ -84,7 +88,7 @@ public class BoardDal : IBoardDal
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
         conn.Open();
-        string query = "DELETE FROM board_user_audio WHERE boardid = @Boardid AND audioid = @Audioid AND userid = @Userid";
+        string query = "DELETE FROM user_board_audio WHERE boardid = @Boardid AND audioid = @Audioid AND userid = @Userid";
         using (var cmd = new MySqlCommand(query, conn))
         {
             cmd.Parameters.AddWithValue("@Userid", userid);

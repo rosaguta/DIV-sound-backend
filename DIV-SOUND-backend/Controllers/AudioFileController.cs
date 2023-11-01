@@ -29,4 +29,16 @@ public class AudioFileController : ControllerBase
         return collection.Audiofiles;
     }
 
+    [HttpDelete]
+    [Route("/AudioFiles")]
+    public IActionResult DeleteFiles(int audiofileid, int userid)
+    {
+        bool deleted = new AudiofileCollection().deleteFile(audiofileid, userid);
+        if (deleted)
+        {
+            return Ok();
+        }
+        return BadRequest();
+
+    }
 }

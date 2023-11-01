@@ -7,5 +7,5 @@ public interface IAudiofileDal
 {
     string UploadFile(IFormFile file, AudiofileDTO audiofileDto);
     List<AudiofileDTO> GetFiles(int userid);
-    //List<AudiofileDTO> GetFiles(int userid, int boardid);
+    bool DeleteFile(int audiofileid, int userid);
 } 

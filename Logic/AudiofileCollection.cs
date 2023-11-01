@@ -44,4 +44,10 @@ public class AudiofileCollection
         }
         return Audiofiles;
     }
+
+    public bool deleteFile(int audiofileid, int userid)
+    {
+        bool deleted = audiofileDal.DeleteFile(audiofileid, userid);
+        return deleted;
+    }
 }
