@@ -17,6 +17,7 @@ public class BoardDal : IBoardDal
             cmd.Parameters.AddWithValue("@Name", name);
             cmd.Parameters.AddWithValue("@Userid", userid);
             int rowsaffected = cmd.ExecuteNonQuery();
+            conn.Close();
             return rowsaffected > 0;
         }
     }
@@ -33,6 +34,7 @@ public class BoardDal : IBoardDal
             cmd.Parameters.AddWithValue("@Audioid", fileid);
             cmd.Parameters.AddWithValue("@Boardid", boardid);
             int rowsaffected = cmd.ExecuteNonQuery();
+            conn.Close();
             return rowsaffected > 0;
         }
     }
@@ -80,7 +82,7 @@ public class BoardDal : IBoardDal
 
             boarddto.AudioList.Add(audiofiledto);
         }
-
+        conn.Close();
         return boards;
     }
     public bool RemoveFileFromBoard(int boardid, int audiofileid, int userid)
@@ -95,6 +97,7 @@ public class BoardDal : IBoardDal
             cmd.Parameters.AddWithValue("@Audioid", audiofileid);
             cmd.Parameters.AddWithValue("@Boardid", boardid);
             int rowsaffected = cmd.ExecuteNonQuery();
+            conn.Close();
             return rowsaffected > 0;
         }
     }
@@ -108,6 +111,7 @@ public class BoardDal : IBoardDal
         {
             cmd.Parameters.AddWithValue("@Boardid", boardid);
             int rowsAffected = cmd.ExecuteNonQuery();
+            conn.Close();
             return rowsAffected > 0;
         }
     }

@@ -38,8 +38,10 @@ public class UserDal : IUserDal
                 Passhash = Convert.ToString(data["passhash"]),
                 Username = Convert.ToString(data["username"])
             };
+            conn.Close();
             return userdto;
         }
+        conn.Close();
         return null;
     }
 
@@ -58,6 +60,7 @@ public class UserDal : IUserDal
             cmd.Parameters.AddWithValue("@Mail", userDto.Mail);
             cmd.Parameters.AddWithValue("@Passhash",userDto.Passhash);
             int rowsaffected = cmd.ExecuteNonQuery();
+            conn.Close();
             return rowsaffected > 0;
         }
     }
@@ -82,7 +85,7 @@ public class UserDal : IUserDal
             userdto.Passhash = reader.GetString("passhash");
             userdtolist.Add(userdto);
         }
-
+        conn.Close();
         return userdtolist;
     }
 
@@ -101,7 +104,7 @@ public class UserDal : IUserDal
             string url = reader.GetString("url");
             urls.Add(url);
         }
-
+        conn.Close();
         return urls;
     }
 }

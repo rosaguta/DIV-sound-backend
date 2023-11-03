@@ -56,7 +56,7 @@ public class AudiofileDal : IAudiofileDal
             ListFiles.Add(audiofileDto);
             
         }
-
+        conn.Close();
         return ListFiles;
     }
 
@@ -75,10 +75,12 @@ public class AudiofileDal : IAudiofileDal
                 cmd.Parameters.AddWithValue("@Userid", userid);
                 cmd.Parameters.AddWithValue("@Audiofileid", audiofileid);
                 int rowsaffected = cmd.ExecuteNonQuery();
+                conn.Close();
                 return rowsaffected > 0; 
             }
+            
         }
-
+        
         return false;
     }
 
@@ -209,6 +211,7 @@ public class AudiofileDal : IAudiofileDal
             cmd.Parameters.AddWithValue("@url", audiofiledto.url);
             cmd.ExecuteNonQuery();
         }
+        conn.Close();
     }
     
     
