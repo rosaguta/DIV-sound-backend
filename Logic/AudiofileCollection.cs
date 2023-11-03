@@ -47,7 +47,9 @@ public class AudiofileCollection
 
     public bool deleteFile(int audiofileid, int userid)
     {
-        bool deleted = audiofileDal.DeleteFile(audiofileid, userid);
+        List<AudiofileDTO> audiofileDtos = audiofileDal.GetFiles(userid);
+        AudiofileDTO filedto = audiofileDtos.FirstOrDefault(obj => obj.Id == audiofileid);
+        bool deleted = audiofileDal.DeleteFile(audiofileid, userid, filedto.Path);
         return deleted;
     }
 }

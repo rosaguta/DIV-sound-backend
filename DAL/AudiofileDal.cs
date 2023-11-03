@@ -60,19 +60,48 @@ public class AudiofileDal : IAudiofileDal
         return ListFiles;
     }
 
-    public bool DeleteFile(int audiofileid, int userid)
+    public bool DeleteFile(int audiofileid, int userid, string ftppath)
     {
-        string? connectionstring = Getconnectionstring();
-        var conn = new MySqlConnection(connectionstring);
-        conn.Open();
-        string query = "DELETE FROM audiofile WHERE uploaderid = @Userid AND id = @Audiofileid";
-        using (var cmd = new MySqlCommand(query,conn))
+
+        bool deleted = DeleteFileFromServer(userid, ftppath);
+        if(deleted)
         {
-            cmd.Parameters.AddWithValue("@Userid", userid);
-            cmd.Parameters.AddWithValue("@Audiofileid", audiofileid);
-            int rowsaffected = cmd.ExecuteNonQuery();
-            return rowsaffected > 0;
+            string? connectionstring = Getconnectionstring();
+            var conn = new MySqlConnection(connectionstring);
+            conn.Open();
+            string query = "DELETE FROM audiofile WHERE uploaderid = @Userid AND id = @Audiofileid";
+            using (var cmd = new MySqlCommand(query,conn))
+            {
+                cmd.Parameters.AddWithValue("@Userid", userid);
+                cmd.Parameters.AddWithValue("@Audiofileid", audiofileid);
+                int rowsaffected = cmd.ExecuteNonQuery();
+                return rowsaffected > 0; 
+            }
         }
+
+        return false;
+    }
+
+    private bool DeleteFileFromServer(int userid, string ftppath)
+    {
+        string ftpUsername = GetFTPUsername();
+        string ftpPassword = GetFTPPassword();
+        try
+        {
+            // Get the object used to communicate with the server.
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftppath);
+            request.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
+            request.Method = WebRequestMethods.Ftp.DeleteFile;
+
+            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+            //Console.WriteLine("Delete status: {0}", response.StatusDescription);
+            response.Close();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }            
     }
 
     private string SendToFtpServer(string ftpserver, string FtpUsername, string FtpPassword, IFormFile file,
