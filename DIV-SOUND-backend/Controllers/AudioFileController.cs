@@ -11,12 +11,16 @@ public class AudioFileController : ControllerBase
 {
     [HttpPost]
     [Route("/AudioFiles")]
-    public string UploadFile(IFormFile formFile, int Uploaderid)
+    public string UploadFile(List<IFormFile> formFiles, int Uploaderid)
     {
         
         
         AudiofileCollection collection = new AudiofileCollection();
-        string status = collection.UploadFile(formFile, Uploaderid);
+        string status = "";
+        foreach (IFormFile formFile in formFiles)
+        {
+            status = collection.UploadFile(formFile, Uploaderid);
+        }
         return status;
     }
 
