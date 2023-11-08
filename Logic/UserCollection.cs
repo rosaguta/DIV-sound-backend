@@ -18,6 +18,12 @@ public class UserCollection
         UserDal = Factory.Factory.GetUserDal();
     }
 
+    public UserCollection(IUserDal userDal)
+    {
+        Userlist = new List<User>();
+        UserDal = userDal;
+    }
+
     public bool Register(string firstname, string lastname, string password, string mail, string username)
     {
         DTO.UserDTO userDTO = new UserDTO();
