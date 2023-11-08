@@ -6,6 +6,8 @@ variables:
   Test_Project_Path: "div-sound-backend/UnitTest.csproj"
 
 build:
+  tags:
+    - backend
   stage: build
   script:
     - dotnet test $Test_Project_Path
@@ -13,6 +15,8 @@ build:
     - master
 
 docker_build:
+  tags:
+    - backend
   stage: build
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
