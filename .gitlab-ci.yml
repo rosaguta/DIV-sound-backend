@@ -6,6 +6,12 @@ variables:
   Test_Project_Path: "div-sound-backend/UnitTest.csproj"
 
 .pre:
+  tags:
+    - backend
+  only:
+    - master
+  stage:
+    .pre
   script:
     - apk add dotnet7-sdk 
     - apk add --update docker openrc
