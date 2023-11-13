@@ -3,7 +3,7 @@ stages:
 
 variables:
   Solution_Name: "DIV-SOUND-backend.sln"
-  Test_Project_Path: "DIV-SOUND-backend/UnitTest.csproj"
+  Test_Project_Path: UnitTest/UnitTest.csproj"
 
 # install_packages:
 #   tags:
