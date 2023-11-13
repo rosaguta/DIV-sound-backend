@@ -22,6 +22,8 @@ build:
     - backend
   stage: build
   script:
+    - ls
+    - pwd
     - dotnet test $Test_Project_Path
   only:
     - master
