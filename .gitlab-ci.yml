@@ -5,17 +5,17 @@ variables:
   Solution_Name: "DIV-SOUND-backend.sln"
   Test_Project_Path: "div-sound-backend/UnitTest.csproj"
 
-install_packages:
-  tags:
-    - backend
-  only:
-    - master
-  stage:
-    build
-  script:
-    - apk add dotnet7-sdk 
-    - apk add --update docker openrc
-    - service docker start
+# install_packages:
+#   tags:
+#     - backend
+#   only:
+#     - master
+#   stage:
+#     build
+#   script:
+#     - apk add dotnet7-sdk 
+#     - apk add --update docker openrc
+#     - service docker start
 
 build:
   tags:
@@ -25,6 +25,7 @@ build:
     - dotnet test $Test_Project_Path
   only:
     - master
+  image: mcr.microsoft.com/dotnet/sdk:7.0-sid
 
 docker_build:
   tags:
