@@ -22,7 +22,7 @@ build:
     - backend
   stage: build
   script:
-    - ls
+    - ls DIV-SOUND-backend
     - pwd
     - dotnet test $Test_Project_Path
   only:
