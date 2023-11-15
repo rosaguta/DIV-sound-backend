@@ -21,10 +21,10 @@ test:
 build:
   tags:
     - backend
-  image: docker:20.10.16
+  # image: docker:20.10.16
   stage: build
   services:
-    - docker:20.10.16-dind
+    # - docker:20.10.16-dind
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login docker.io/digitalroseuwu -u "$CI_REGISTRY_USER" --password-stdin 
     - docker build . -t $CI_REGISTRY/:latest -f ./DIV-SOUND-backend/Dockerfile
