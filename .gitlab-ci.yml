@@ -19,6 +19,8 @@ test:
   image: mcr.microsoft.com/dotnet/nightly/sdk:7.0
 
 build:
+  tags:
+    - backend
   image: docker:20.10.16
   stage: build
   services:
