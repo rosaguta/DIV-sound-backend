@@ -26,7 +26,7 @@ build:
   services:
     - docker:20.10.16-dind
   script:
-    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD 
+    - echo "$CI_REGISTRY_PASSWORD" | docker login docker.io/digitalroseuwu -u "$CI_REGISTRY_USER" --password-stdin 
     - docker build . -t $CI_REGISTRY/:latest -f ./DIV-SOUND-backend/Dockerfile
     - docker push $CI_REGISTRY/:latest
   only:
