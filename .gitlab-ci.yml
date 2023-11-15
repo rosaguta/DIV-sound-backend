@@ -6,7 +6,7 @@ variables:
   Test_Project_Path: UnitTest/UnitTest.csproj"
 
 
-build:
+test:
   tags:
     - backend
   stage: build
@@ -23,8 +23,8 @@ docker_build:
     - backend
   stage: build
   script:
-    ls
-    pwd
+    - ls
+    - pwd
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - docker build . -t testwebapp:latest -f ./testwebapp/Dockerfile
     - docker tag testwebapp:latest "$CI_REGISTRY_IMAGE:testwebapp-latest"
@@ -32,4 +32,4 @@ docker_build:
   only:
     - master
   needs:
-    - build
+    - test
