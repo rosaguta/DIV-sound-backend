@@ -18,17 +18,15 @@ test:
     - master
   image: mcr.microsoft.com/dotnet/nightly/sdk:7.0
 
-docker_build:
-  tags:
-    - backend
+build:
+  image: docker:20.10.16
   stage: build
+  services:
+    - docker:20.10.16-dind
   script:
-    - ls
-    - pwd
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    - docker build . -t testwebapp:latest -f ./testwebapp/Dockerfile
-    - docker tag testwebapp:latest "$CI_REGISTRY_IMAGE:testwebapp-latest"
-    - docker push "$CI_REGISTRY_IMAGE:testwebapp-latest"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build . -t $CI_REGISTRY_USER/div-sound-backend:latest -f ./DIV-SOUND-backend/Dockerfile
+    - docker push $CI_REGISTRY_USER/div-sound-backend:latest
   only:
     - master
   needs:
