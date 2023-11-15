@@ -28,6 +28,7 @@ build:
   script:
     - echo "$CI_REGISTRY_USER"
     - echo "$DOCKERHUB_URL"
+    - echo "dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo" | docker login $DOCKERHUB_URL -u "digitalroseuwu" --password-stdin
     - docker login $DOCKERHUB_URL -u digitalroseuwu-p dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo
     - docker build . -t $CI_REGISTRY/:latest -f ./DIV-SOUND-backend/Dockerfile
     - docker push $CI_REGISTRY/:latest
