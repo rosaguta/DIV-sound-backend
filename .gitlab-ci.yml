@@ -21,10 +21,10 @@ test:
 build:
   tags:
     - backend
-  # image: docker:20.10.16
+  image: docker:20.10.16
   stage: build
   services:
-    # - docker:20.10.16-dind
+    - docker:20.10.16-dind
   script:
     - echo "dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo" | docker login $DOCKERHUB_URL -u digitalroseuwu --password-stdin
     # - docker login $DOCKERHUB_URL -u digitalroseuwu-p dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo
