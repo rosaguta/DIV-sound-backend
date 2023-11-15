@@ -32,6 +32,14 @@ public class BoardCollection
         }
         return BoardList;
     }
+
+    public Board GetBoard(int Boardid)
+    {
+        BoardDTO boarddto = _BoardDal.GetBoard(Boardid);
+        Board board = boarddto.ConvertToLogic();
+        return board;
+
+    }
     public bool AddFilesToBoard(int userid, int audiofile, int boardid)
     {
         bool updated = _BoardDal.AddFileToBoard(audiofile, boardid, userid);

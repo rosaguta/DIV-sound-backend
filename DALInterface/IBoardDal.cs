@@ -10,4 +10,5 @@ public interface IBoardDal
     List<BoardDTO> GetBoards(int userid);
     bool RemoveFileFromBoard(int boardid, int audiofileid, int userid);
     bool DeleteBoard(int boardid);
+    BoardDTO GetBoard(int boardid);
 }

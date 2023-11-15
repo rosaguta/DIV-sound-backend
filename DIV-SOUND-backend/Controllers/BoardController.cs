@@ -27,6 +27,15 @@ namespace DIV_SOUND_backend.Controllers
             boards.GetBoards(userid);
             return boards.BoardList;
         }
+
+        [HttpGet]
+        [Route("/Boards/{Boardid}")]
+        public Board GetBoard(int Boardid)
+        {
+            BoardCollection boardcoll = new BoardCollection();
+            Board board = boardcoll.GetBoard(Boardid);
+            return board;
+        }
         [HttpPost]
         [Route("/Boards/{Boardid}/{AudiofileId}")]
         public IActionResult AddFiles(int userid, int Boardid, int AudiofileId) 

@@ -1,10 +1,10 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1cfac947_002De103_002D4049_002Dbfcf_002Dc0be53cea93f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RegisterTest_AlreadyExists" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1cfac947_002De103_002D4049_002Dbfcf_002Dc0be53cea93f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="RegisterTest_AlreadyExists" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::3B964C95-2CA1-4E15-A8D4-67CEA6363006::net7.0::UserTests.UserCollectionTest.RegisterTest_AlreadyExists&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ec1eb757_002Da940_002D4b81_002Da00a_002Dee432871d793/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="RegisterTest_AlreadyExists #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ec1eb757_002Da940_002D4b81_002Da00a_002Dee432871d793/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RegisterTest_AlreadyExists #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::3B964C95-2CA1-4E15-A8D4-67CEA6363006::net7.0::UserTests.UserCollectionTest.RegisterTest_AlreadyExists&lt;/TestId&gt;
   &lt;/TestAncestor&gt;

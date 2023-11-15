@@ -85,6 +85,54 @@ public class BoardDal : IBoardDal
         conn.Close();
         return boards;
     }
+
+    public BoardDTO GetBoard(int Boardid)
+    {
+        // BoardDTO boarddto = new BoardDTO();
+        string? connectionstring = Getconnectionstring();
+        var conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "SELECT board.id AS board_id, board.name AS board_name, audiofile.id AS id, audiofile.name AS name, audiofile.url AS url, audiofile.uploaderid as uploaderid, audiofile.uploaddate as uploaddate "+
+                       "FROM board "+ 
+                       "LEFT JOIN user_board_audio ON board.id = user_board_audio.boardid "+
+                       "LEFT JOIN audiofile ON user_board_audio.audioid = audiofile.id "+
+                       "WHERE board.id = @Boardid "+
+                       "ORDER BY board_id ASC";
+        MySqlCommand command = new MySqlCommand(query, conn);
+        command.Parameters.AddWithValue("Boardid", Boardid);
+        MySqlDataReader reader = command.ExecuteReader();
+        BoardDTO boarddto = null;
+        
+        while (reader.Read())
+        {
+           
+            int currentBoardId = reader.GetInt32("board_id");
+
+            if (boarddto == null || currentBoardId != boarddto.Id)
+            {
+                boarddto = new BoardDTO
+                {
+                    name = reader.GetString("board_name"),
+                    Id = currentBoardId,
+                    AudioList = new List<AudiofileDTO>()
+                };
+            }
+                
+            
+
+            AudiofileDTO audiofiledto = new AudiofileDTO();
+            audiofiledto.Id = reader.IsDBNull(reader.GetOrdinal("id")) ? (int?)null : reader.GetInt32("id");
+            audiofiledto.Filename = reader.IsDBNull(reader.GetOrdinal("name")) ? null : reader.GetString("name");
+            audiofiledto.Uploaddate = reader.IsDBNull(reader.GetOrdinal("uploaddate")) ? (DateTime?)null : reader.GetDateTime("uploaddate");
+            audiofiledto.Uploaderid = reader.IsDBNull(reader.GetOrdinal("uploaderid")) ? (int?)null : reader.GetInt32("uploaderid");
+            audiofiledto.url = reader.IsDBNull(reader.GetOrdinal("url")) ? null : reader.GetString("url");
+
+            boarddto.AudioList.Add(audiofiledto);
+        }
+        conn.Close();
+        return boarddto;
+
+    }
     public bool RemoveFileFromBoard(int boardid, int audiofileid, int userid)
     {
         string? connectionstring = Getconnectionstring();
