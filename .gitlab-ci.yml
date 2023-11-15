@@ -5,17 +5,6 @@ variables:
   Solution_Name: "DIV-SOUND-backend.sln"
   Test_Project_Path: UnitTest/UnitTest.csproj"
 
-# install_packages:
-#   tags:
-#     - backend
-#   only:
-#     - master
-#   stage:
-#     build
-#   script:
-#     - apk add dotnet7-sdk 
-#     - apk add --update docker openrc
-#     - service docker start
 
 build:
   tags:
@@ -40,3 +29,5 @@ docker_build:
     - docker push "$CI_REGISTRY_IMAGE:testwebapp-latest"
   only:
     - master
+  needs:
+    - build
