@@ -44,7 +44,7 @@ public class BoardDal : IBoardDal
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
         conn.Open();
-        string query = "SELECT board.id AS board_id, board.name AS board_name, audiofile.id AS id, audiofile.name AS name, audiofile.url AS url, audiofile.uploaderid as uploaderid, audiofile.uploaddate as uploaddate "+
+        string query = "SELECT board.id AS board_id, board.name AS board_name, board.sessionid AS board_session, audiofile.id AS id, audiofile.name AS name, audiofile.url AS url, audiofile.uploaderid as uploaderid, audiofile.uploaddate as uploaddate "+
         "FROM board "+ 
         "LEFT JOIN user_board_audio ON board.id = user_board_audio.boardid "+
         "LEFT JOIN audiofile ON user_board_audio.audioid = audiofile.id "+
@@ -68,6 +68,7 @@ public class BoardDal : IBoardDal
                 {
                     name = reader.GetString("board_name"),
                     Id = currentBoardId,
+                    sessionid = reader.IsDBNull(reader.GetOrdinal("board_session")) ? null : reader.GetString("board_session"),
                     AudioList = new List<AudiofileDTO>()
                 };
                 boards.Add(boarddto);
@@ -92,7 +93,7 @@ public class BoardDal : IBoardDal
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
         conn.Open();
-        string query = "SELECT board.id AS board_id, board.name AS board_name, audiofile.id AS id, audiofile.name AS name, audiofile.url AS url, audiofile.uploaderid as uploaderid, audiofile.uploaddate as uploaddate "+
+        string query = "SELECT board.id AS board_id, board.name AS board_name, board.sessionid AS board_session ,audiofile.id AS id, audiofile.name AS name, audiofile.url AS url, audiofile.uploaderid as uploaderid, audiofile.uploaddate as uploaddate "+
                        "FROM board "+ 
                        "LEFT JOIN user_board_audio ON board.id = user_board_audio.boardid "+
                        "LEFT JOIN audiofile ON user_board_audio.audioid = audiofile.id "+
@@ -114,6 +115,7 @@ public class BoardDal : IBoardDal
                 {
                     name = reader.GetString("board_name"),
                     Id = currentBoardId,
+                    sessionid = reader.IsDBNull(reader.GetOrdinal("board_session")) ? null : reader.GetString("board_session"),
                     AudioList = new List<AudiofileDTO>()
                 };
             }
@@ -162,6 +164,76 @@ public class BoardDal : IBoardDal
             conn.Close();
             return rowsAffected > 0;
         }
+    }
+
+    public string CreateRoomSessionId(string sessionid, int boardid)
+    {
+        string? connectionstring = Getconnectionstring();
+        var conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "UPDATE board SET sessionid = @Sessionid WHERE id = @Boardid";
+        using (var cmd = new MySqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("@Sessionid", sessionid);
+            cmd.Parameters.AddWithValue("@Boardid", boardid);
+            bool updated = cmd.ExecuteNonQuery() > 0;
+            conn.Close();
+            if (updated)
+            {
+                return sessionid;
+            };
+            return "";
+        }
+    }
+
+    public BoardDTO GetBoardFromSession(string sessionid)
+    {
+        string? connectionstring = Getconnectionstring();
+        var conn = new MySqlConnection(connectionstring);
+        conn.Open();
+        string query = "SELECT board.id AS board_id, board.name AS board_name, board.sessionid AS board_session ,audiofile.id AS id, audiofile.name AS name, audiofile.url AS url, audiofile.uploaderid as uploaderid, audiofile.uploaddate as uploaddate "+
+                       "FROM board "+ 
+                       "LEFT JOIN user_board_audio ON board.id = user_board_audio.boardid "+
+                       "LEFT JOIN audiofile ON user_board_audio.audioid = audiofile.id "+
+                       "WHERE board.sessionid = @Sessionid "+
+                       "ORDER BY board_id ASC";
+        
+        MySqlCommand command = new MySqlCommand(query, conn);
+        command.Parameters.AddWithValue("@Sessionid", sessionid);
+        MySqlDataReader reader = command.ExecuteReader();
+        BoardDTO boarddto = null;
+        
+        while (reader.Read())
+        {
+           
+            int currentBoardId = reader.GetInt32("board_id");
+
+            if (boarddto == null || currentBoardId != boarddto.Id)
+            {
+                boarddto = new BoardDTO
+                {
+                    name = reader.GetString("board_name"),
+                    Id = currentBoardId,
+                    sessionid = reader.IsDBNull(reader.GetOrdinal("board_session")) ? null : reader.GetString("board_session"),
+                    AudioList = new List<AudiofileDTO>()
+                };
+            }
+                
+            
+
+            AudiofileDTO audiofiledto = new AudiofileDTO();
+            audiofiledto.Id = reader.IsDBNull(reader.GetOrdinal("id")) ? (int?)null : reader.GetInt32("id");
+            audiofiledto.Filename = reader.IsDBNull(reader.GetOrdinal("name")) ? null : reader.GetString("name");
+            audiofiledto.Uploaddate = reader.IsDBNull(reader.GetOrdinal("uploaddate")) ? (DateTime?)null : reader.GetDateTime("uploaddate");
+            audiofiledto.Uploaderid = reader.IsDBNull(reader.GetOrdinal("uploaderid")) ? (int?)null : reader.GetInt32("uploaderid");
+            audiofiledto.url = reader.IsDBNull(reader.GetOrdinal("url")) ? null : reader.GetString("url");
+
+            boarddto.AudioList.Add(audiofiledto);
+        }
+        conn.Close();
+        return boarddto;
+
+        
     }
     private string? Getconnectionstring()
     {

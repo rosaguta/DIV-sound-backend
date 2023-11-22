@@ -11,4 +11,6 @@ public interface IBoardDal
     bool RemoveFileFromBoard(int boardid, int audiofileid, int userid);
     bool DeleteBoard(int boardid);
     BoardDTO GetBoard(int boardid);
+    string CreateRoomSessionId(string sessionid, int boardid);
+    BoardDTO GetBoardFromSession(string sessionid);
 }

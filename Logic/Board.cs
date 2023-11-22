@@ -6,7 +6,9 @@ public class Board
 {
     public int Id { get; set; }
     public string name { get; set; }
+    public string? sessionid { get; set; }
     public List<Audiofile> AudioList { get; set; }
+    
     
     public Board()
     {

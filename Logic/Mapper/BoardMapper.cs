@@ -18,6 +18,7 @@ namespace Logic.Mapper
             Board b = new Board();
             b.Id = boardDTO.Id;
             b.name = boardDTO.name;
+            b.sessionid = boardDTO.sessionid;
             foreach(AudiofileDTO audiofile in boardDTO.AudioList)
             {
                 b.AudioList.Add(audiofile.ConvertToLogic());
@@ -38,7 +39,8 @@ namespace Logic.Mapper
             return new BoardDTO()
             {
                 Id = board.Id,
-                name = board.name,  
+                name = board.name, 
+                sessionid = board.sessionid
             };
         }
     }

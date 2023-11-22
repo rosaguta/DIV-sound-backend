@@ -63,5 +63,31 @@ namespace DIV_SOUND_backend.Controllers
             if(deleted) { return Ok(); }
             return BadRequest();
         }
+
+        [HttpPut]
+        [Route("/Boards/{boardid}/CreateRoomSessionId")]
+        public IActionResult CreateRoomSessionId(int boardid)
+        {
+            BoardCollection boardCollection = new BoardCollection();
+            string roomid = boardCollection.CreateRoomSessionId(boardid);
+            if (roomid != "")
+            {
+                return Ok(roomid);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("/Boards/Session/{SessionId}")]
+        public Board GetBoardFromSessionId(string SessionId)
+        {
+            BoardCollection boardCollection = new BoardCollection();
+            Board board = boardCollection.GetBoardFromSession(SessionId);
+            return board;
+        }
+
+
+        
     }
 }

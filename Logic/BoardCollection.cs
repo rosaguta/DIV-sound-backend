@@ -11,6 +11,8 @@ public class BoardCollection
 {
     public List<Board> BoardList { get; set; }
     IBoardDal _BoardDal;
+    
+    private static Random random = new Random();
 
     public BoardCollection()
     {
@@ -54,5 +56,25 @@ public class BoardCollection
     {
         bool deleted = _BoardDal.DeleteBoard(boardid);
         return deleted;
+    }
+
+    public string CreateRoomSessionId(int boardid)
+    {
+        string sessionid = RandomString(6);
+        string roomsessionid = _BoardDal.CreateRoomSessionId(sessionid, boardid);
+        return roomsessionid;
+    }
+
+    public Board GetBoardFromSession(string sessionid)
+    {
+        BoardDTO boarddto = _BoardDal.GetBoardFromSession(sessionid);
+        Board board = boarddto.ConvertToLogic();
+        return board;
+    }
+    private string RandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }
