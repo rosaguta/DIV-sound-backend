@@ -124,7 +124,7 @@ public class IntegrationTests
     }
 
     [Test]
-    public async Task CreateBoardFromUserid_NoUserIdGiven()
+    public async Task CreateBoardF3romUserid_NoUserIdGiven()
     {
         string boardname = "ThisGetsNeverAdded";
 
@@ -133,4 +133,5 @@ public class IntegrationTests
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
     }
     
+    public async Task 
 }

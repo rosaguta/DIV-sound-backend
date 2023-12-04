@@ -20,7 +20,7 @@ public class BoardCollection
         _BoardDal = Factory.Factory.GetBoardDal();
     }
 
-    public bool CreateBoard(string name, int userid)
+    public bool CreateBoard(string name, int? userid)
     {
         bool created =_BoardDal.CreateBoard(name, userid);
         return created;

@@ -6,8 +6,12 @@ namespace DAL;
 
 public class BoardDal : IBoardDal
 {
-    public bool CreateBoard(string name, int userid)
+    public bool CreateBoard(string name, int? userid)
     {
+        if (null == userid)
+        {
+            return false;
+        }
         string? connectionstring = Getconnectionstring();
         var conn = new MySqlConnection(connectionstring);
         conn.Open();

@@ -12,7 +12,7 @@ namespace DIV_SOUND_backend.Controllers
     {
         [HttpPost]
         [Route("/Boards")]
-        public IActionResult CreateBoard(string name, int userid)
+        public IActionResult CreateBoard(string name, int? userid)
         {
             BoardCollection boardCollection = new BoardCollection();
             bool created  = boardCollection.CreateBoard(name, userid);

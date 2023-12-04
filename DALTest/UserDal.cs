@@ -15,9 +15,9 @@ public class UserDal : IUserDal
         return users;
     }
 
-    public UserDTO GetUser(string email)
+    public UserDTO GetUser(string username)
     {
-        if (email == "Rose@mail.com")
+        if (username == "Rose")
         {
             return new UserDTO(0,"Rose", "van Leeuwen", "Rose@mail.com", "Rose", "c3RyaW5n");
         }
