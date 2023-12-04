@@ -16,6 +16,7 @@ public class AudiofileDal : IAudiofileDal
         var ftpserver = GetFTPServer();
         var ftpusername = GetFTPUsername();
         var ftppassword = GetFTPPassword();
+        var ftppath = GetFTPPath();
         var exists = CheckFolderExistence(audiofileDto.Uploaderid);
         if (!exists)
         {
@@ -23,9 +24,9 @@ public class AudiofileDal : IAudiofileDal
             ChangeFolderPermissions(audiofileDto.Uploaderid);
         }
 
-        var response = SendToFtpServer(ftpserver, ftpusername, ftppassword, file, audiofileDto.Uploaderid);
+        var response = SendToFtpServer(ftpserver, ftpusername, ftppassword, ftppath ,file, audiofileDto.Uploaderid);
         ChangeFilePermissions(file, audiofileDto.Uploaderid);
-        audiofileDto.Path = $"{GetFTPServer()}//files/{audiofileDto.Uploaderid}/{file.FileName}";
+        audiofileDto.Path = $"{GetFTPServer()}//{ftppath}/{audiofileDto.Uploaderid}/{file.FileName}";
         var input = GetFTPServer();
         var index = input.IndexOf(":");
         var ip = input.Substring(index + 1);
@@ -106,10 +107,10 @@ public class AudiofileDal : IAudiofileDal
         }            
     }
 
-    private string SendToFtpServer(string ftpserver, string FtpUsername, string FtpPassword, IFormFile file,
+    private string SendToFtpServer(string ftpserver, string FtpUsername, string FtpPassword, string ftppath ,IFormFile file,
         int? uploaderid)
     {
-        var remotepath = $"{ftpserver}//files/{uploaderid}/{file.FileName}";
+        var remotepath = $"{ftpserver}//{ftppath}/{uploaderid}/{file.FileName}";
         var request = (FtpWebRequest)WebRequest.Create(remotepath);
         request.Method = WebRequestMethods.Ftp.AppendFile;
         request.Credentials = new NetworkCredential(FtpUsername, FtpPassword);
@@ -251,6 +252,14 @@ public class AudiofileDal : IAudiofileDal
         var jsonObject = (JsonObject?)JsonNode.Parse(File.ReadAllText(jsonfile));
         var sqlservervalue = (string?)jsonObject["ConnectionStrings"]["SqlServer"];
         return sqlservervalue;
+    }
+
+    private string? GetFTPPath()
+    {
+        var jsonObject = GetAppsettings();
+        var ftppath = (string?)jsonObject["ConnectionStrings"]["ftpPath"];
+        return ftppath;
+    
     }
 
     private void ChangeFilePermissions(IFormFile file, int? uploaderid)
