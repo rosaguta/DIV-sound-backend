@@ -129,9 +129,7 @@ public class IntegrationTests
         string boardname = "ThisGetsNeverAdded";
 
         var response = await _client.PostAsync($"/Boards?name={boardname}?userid=", null);
-        
+
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
     }
-    
-    public async Task 
 }
