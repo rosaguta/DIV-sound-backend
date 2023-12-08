@@ -42,10 +42,12 @@ push_to_main:
     - credentials=$(echo -n ":$pat" | base64)
     - git clone https://r.vanleeuwen:glpat-jShPpr5qPgUc4zso_SN1@git.digitalindividuals.com/rvleeuwen/div-sound-backend.git || exit 1
     - cd div-sound-backend || exit 1
-    - echo "$buildmessage"
-    - echo "merging from Development to main"
-    - git pull -a
-    - mergeMessage=$(git merge origin/master -X theirs -m "$buildmessage")
+    - git branch
+
+    #- echo "$buildmessage"
+    #- echo "merging from Development to main"
+    #- git pull -a
+    #- mergeMessage=$(git merge origin/master -X theirs -m "$buildmessage")
 
   only:
     - master
