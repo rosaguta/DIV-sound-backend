@@ -49,7 +49,8 @@ push_to_main:
     - echo "$CI_COMMIT_MESSAGE"
     - echo "merging from Development to main"
     - git pull -a
-    - mergeMessage=$(git merge origin/master -X theirs -m "$CI_COMMIT_MESSAGE")
+    - git merge origin/master -X theirs -m "$CI_COMMIT_MESSAGE"
+    - git push origin main
     - echo $mergeMessage
   only:
     - master
@@ -71,4 +72,4 @@ main_test:
     - /d:sonar.host.url=https://sonarcloud.io
     - dotnet test
     - dotnet sonarscanner end
-    
+  image: mcr.microsoft.com/dotnet/nightly/sdk:7.0
