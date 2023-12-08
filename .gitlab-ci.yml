@@ -11,9 +11,7 @@ test:
     - backend
   stage: build
   script:
-    - ls DIV-SOUND-backend
-    - pwd
-    - dotnet test $Test_Project_Path
+    - dotnet test 
   only:
     - master
   image: mcr.microsoft.com/dotnet/nightly/sdk:7.0
