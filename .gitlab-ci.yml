@@ -38,6 +38,8 @@ push_to_main:
   script:
     - apk update
     - apk add git
+    - git config --global user.email "rvleeuwen@DigitalIndividuals.com"
+    - git config --global user.name "Rose van Leeuwen"
     - cd $TMPDIR || exit 1
     - pat="YOUR_PAT_HERE"
     - credentials=$(echo -n ":$pat" | base64)
