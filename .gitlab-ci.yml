@@ -31,6 +31,8 @@ build:
     - test
 
 push_to_main:
+  tags:
+    - backend
   stage: merge
   script:
     - git checkout main
