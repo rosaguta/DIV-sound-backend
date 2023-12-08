@@ -44,7 +44,7 @@ push_to_main:
     - cd div-sound-backend || exit 1
     - echo "$buildmessage"
     - echo "merging from Development to main"
-    - mergeMessage=$(git merge origin/Development -X theirs -m "$buildmessage")
+    - mergeMessage=$(git merge origin/master -X theirs -m "$buildmessage")
 
   only:
     - master
