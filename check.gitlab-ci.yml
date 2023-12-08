@@ -1,0 +1,18 @@
+stages:
+  - final_test
+main_test:
+  tags:
+    - backend
+  stage: final_test
+  only:
+    - main
+  script:
+    - dotnet tool install --global dotnet-sonarscanner
+    - export SONAR_TOKEN=0ee26b65d77314b8c278ecd08863e68764f6a247
+    - dotnet sonarscanner begin \
+    - /o:digitialindividuals \
+    - /k:digitialindividuals_digitialindividuals \
+    - /d:sonar.host.url=https://sonarcloud.io
+    - dotnet test
+    - dotnet sonarscanner end
+  image: mcr.microsoft.com/dotnet/nightly/sdk:7.
