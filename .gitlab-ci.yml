@@ -71,4 +71,4 @@ main_test:
     - /d:sonar.host.url=https://sonarcloud.io
     - dotnet test
     - dotnet sonarscanner end
-    
+  image: mcr.microsoft.com/dotnet/nightly/sdk:7.0
