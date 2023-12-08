@@ -64,6 +64,7 @@ main_test:
   only:
     - main
   script:
+    - export PATH="$PATH:/root/.dotnet/tools"
     - dotnet tool install --global dotnet-sonarscanner
     - export SONAR_TOKEN=0ee26b65d77314b8c278ecd08863e68764f6a247
     - dotnet sonarscanner begin \
