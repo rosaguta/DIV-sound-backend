@@ -1,9 +1,6 @@
 stages:
   - build
-
-variables:
-  Solution_Name: "DIV-SOUND-backend.sln"
-  Test_Project_Path: UnitTest/UnitTest.csproj"
+  - merge
 
 
 test:
@@ -28,6 +25,17 @@ build:
     # - docker login $DOCKERHUB_URL -u digitalroseuwu-p dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo
     - docker build . -t digitalroseuwu/div-sound-backend:latest -f ./DIV-SOUND-backend/Dockerfile
     - docker push digitalroseuwu/div-sound-backend:latest
+  only:
+    - master
+  needs:
+    - test
+
+push_to_main:
+  stage: merge
+  script:
+    - git checkout main
+    - git merge master
+    - git push origin main
   only:
     - master
   needs:
