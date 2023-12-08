@@ -37,8 +37,17 @@ push_to_main:
   script:
     - apk update
     - apk add git
-    - ls -a
-    - touch thisisafile.txt
+    - cd $TMPDIR || exit 1
+    - pat="YOUR_PAT_HERE"
+    - credentials=$(echo -n ":$pat" | base64)
+    - git clone --config "http.extraheader=Authorization: Basic $credentials" "https://git.digitalindividuals.com/rvleeuwen/div-sound-backend.git" || exit 1
+
+    - cd div-sound-backend || exit 1
+
+    - echo "$buildmessage"
+    - echo "merging from Development to main"
+    - mergeMessage=$(git merge origin/Development -X theirs -m "$buildmessage")
+
   only:
     - master
   needs:
