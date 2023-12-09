@@ -1,8 +1,6 @@
 ﻿using System.Data;
 using DALInterface;
 using DTO;
-using System.Text.Json.Nodes;
-using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 namespace DAL;
 
@@ -42,7 +40,7 @@ public class UserDal : IUserDal
         return null;
     }
 
-    public bool NewUser(UserDTO userDto)
+    public bool NewUser(UserDTO userDTO)
     {
         string? connectionstring = Getconnectionstring();
         MySqlConnection conn = new MySqlConnection(connectionstring);
@@ -51,11 +49,11 @@ public class UserDal : IUserDal
                        "VALUES(@Firstname, @Lastname, @Username, @Mail, @Passhash)";
         using (MySqlCommand cmd = new MySqlCommand(query, conn))
         {
-            cmd.Parameters.AddWithValue("@Firstname", userDto.Firstname);
-            cmd.Parameters.AddWithValue("@Lastname", userDto.Lastname);
-            cmd.Parameters.AddWithValue("@Username", userDto.Username);
-            cmd.Parameters.AddWithValue("@Mail", userDto.Mail);
-            cmd.Parameters.AddWithValue("@Passhash",userDto.Passhash);
+            cmd.Parameters.AddWithValue("@Firstname", userDTO.Firstname);
+            cmd.Parameters.AddWithValue("@Lastname", userDTO.Lastname);
+            cmd.Parameters.AddWithValue("@Username", userDTO.Username);
+            cmd.Parameters.AddWithValue("@Mail", userDTO.Mail);
+            cmd.Parameters.AddWithValue("@Passhash",userDTO.Passhash);
             int rowsaffected = cmd.ExecuteNonQuery();
             conn.Close();
             return rowsaffected > 0;
