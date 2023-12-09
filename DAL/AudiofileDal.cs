@@ -138,7 +138,7 @@ public class AudiofileDal : IAudiofileDal
             try
             {
                 // Execute custom FTP command
-                client.CreateDirectory($"files/{uploaderid}", true);
+                client.CreateDirectory($"{GetFTPPath()}/{uploaderid}", true);
                 // Console.WriteLine("Custom FTP command executed successfully.");
             }
             catch (FtpCommandException ex)
@@ -162,7 +162,7 @@ public class AudiofileDal : IAudiofileDal
             try
             {
                 // Execute custom FTP command
-                exists = client.DirectoryExists($"{GetFTPServer()}//files/{uploaderid}");
+                exists = client.DirectoryExists($"{GetFTPServer()}//{GetFTPPath()}/{uploaderid}");
                 // Console.WriteLine("Custom FTP command executed successfully.");
             }
             catch (FtpCommandException ex)
@@ -227,39 +227,27 @@ public class AudiofileDal : IAudiofileDal
 
     private string GetFTPServer()
     {
-        var jsonObject = GetAppsettings();
-        var ftpserver = (string?)jsonObject["ConnectionStrings"]["ftpServer"];
-        return ftpserver;
+        return Environment.GetEnvironmentVariable("FtpServer");
     }
 
     private string GetFTPUsername()
     {
-        var jsonObject = GetAppsettings();
-        var ftpusername = (string?)jsonObject["ConnectionStrings"]["ftpUsername"];
-        return ftpusername;
+        return Environment.GetEnvironmentVariable("FtpUsername");
     }
 
     private string GetFTPPassword()
     {
-        var jsonObject = GetAppsettings();
-        var ftppassword = (string?)jsonObject["ConnectionStrings"]["ftpPassword"];
-        return ftppassword;
+        return Environment.GetEnvironmentVariable("FtpPassword");
     }
 
     private string? Getconnectionstring()
     {
-        var jsonfile = "appsettings.json";
-        var jsonObject = (JsonObject?)JsonNode.Parse(File.ReadAllText(jsonfile));
-        var sqlservervalue = (string?)jsonObject["ConnectionStrings"]["SqlServer"];
-        return sqlservervalue;
+        return Environment.GetEnvironmentVariable("SqlServer");
     }
 
     private string? GetFTPPath()
     {
-        var jsonObject = GetAppsettings();
-        var ftppath = (string?)jsonObject["ConnectionStrings"]["ftpPath"];
-        return ftppath;
-    
+        return Environment.GetEnvironmentVariable("FtpPath");
     }
 
     private void ChangeFilePermissions(IFormFile file, int? uploaderid)
@@ -270,7 +258,7 @@ public class AudiofileDal : IAudiofileDal
             try
             {
                 // Execute custom FTP command
-                client.Execute($"SITE CHMOD 604 files/{uploaderid}/{file.FileName}");
+                client.Execute($"SITE CHMOD 604 {GetFTPPath()}/{uploaderid}/{file.FileName}");
                 Console.WriteLine("Custom FTP command executed successfully.");
             }
             catch (FtpCommandException ex)
@@ -293,7 +281,7 @@ public class AudiofileDal : IAudiofileDal
             try
             {
                 // Execute custom FTP command
-                client.Execute($"SITE CHMOD 705 files/{uploaderid}");
+                client.Execute($"SITE CHMOD 705 {GetFTPPath()}/{uploaderid}");
                 Console.WriteLine("Custom FTP command executed successfully.");
             }
             catch (FtpCommandException ex)

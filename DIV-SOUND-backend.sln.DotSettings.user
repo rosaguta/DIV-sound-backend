@@ -1,16 +1,16 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1cfac947_002De103_002D4049_002Dbfcf_002Dc0be53cea93f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="RegisterTest_AlreadyExists" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::3B964C95-2CA1-4E15-A8D4-67CEA6363006::net7.0::UserTests.UserCollectionTest.RegisterTest_AlreadyExists&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1cfac947_002De103_002D4049_002Dbfcf_002Dc0be53cea93f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RegisterTest_AlreadyExists" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::09F83300-4030-47A4-A0CA-BE6656FEEC35::net7.0::IntegrationTest.IntegrationTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ec1eb757_002Da940_002D4b81_002Da00a_002Dee432871d793/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RegisterTest_AlreadyExists #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::3B964C95-2CA1-4E15-A8D4-67CEA6363006::net7.0::UserTests.UserCollectionTest.RegisterTest_AlreadyExists&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests.GetBoardFromUser&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests.GetBoardFromSessionId&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests.GetBoardFromUser_WrongUserId&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::09F83300-4030-47A4-A0CA-BE6656FEEC35::net7.0::IntegrationTest.IntegrationTests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ec1eb757_002Da940_002D4b81_002Da00a_002Dee432871d793/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="RegisterTest_AlreadyExists #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::3B964C95-2CA1-4E15-A8D4-67CEA6363006::net7.0::UserTests.UserCollectionTest.RegisterTest_AlreadyExists&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests.GetBoardFromUser&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests.GetBoardFromSessionId&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests.GetBoardFromUser_WrongUserId&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::E73C35DF-4A7B-4D44-9DC8-889C5DA72ACF::net7.0::IntegrationTest.IntegrationTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::09F83300-4030-47A4-A0CA-BE6656FEEC35::net7.0::IntegrationTest.IntegrationTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -10,10 +10,7 @@ public class UserDal : IUserDal
 {
     private string? Getconnectionstring()
     {
-        string? jsonfile = "appsettings.json";
-        JsonObject? jsonObject = (JsonObject?)JsonObject.Parse(File.ReadAllText(jsonfile));
-        string? sqlservervalue = (string?)jsonObject["ConnectionStrings"]["SqlServer"];
-        return sqlservervalue;
+        return Environment.GetEnvironmentVariable("SqlServer");
     }
     
     public UserDTO? GetUser(string uname)
