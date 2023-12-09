@@ -15,9 +15,12 @@ public class IntegrationTests
     [SetUp]
     public void Setup()
     {
-        File.Copy("appsettings.test.json", "appsettings.json", true);
+        Environment.SetEnvironmentVariable("SqlServer","Server=138.201.52.251;port=33265;Database=DIVSOUND;User Id=Rose;Password=DIVSound321!");
+        Environment.SetEnvironmentVariable("ftpServer", "ftp://138.201.52.251");
+        Environment.SetEnvironmentVariable("ftpUsername", "devops");
+        Environment.SetEnvironmentVariable("ftpPassword", "tar2pCuBYEd8APVmjvgG");
+        Environment.SetEnvironmentVariable("ftpPath", "files/test");
         _factory = new WebApplicationFactory<Program>();
-
         _client = _factory.CreateClient();
     }
 

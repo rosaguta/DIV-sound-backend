@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Logic;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.Net.Http.Headers;
 
 namespace DIV_SOUND_backend.Controllers;
@@ -13,14 +14,15 @@ public class AudioFileController : ControllerBase
     [Route("/AudioFiles")]
     public string UploadFile(List<IFormFile> formFiles, int Uploaderid)
     {
-        
-        
+
         AudiofileCollection collection = new AudiofileCollection();
         string status = "";
         foreach (IFormFile formFile in formFiles)
         {
-            status = collection.UploadFile(formFile, Uploaderid);
-        }
+            if(formFile.ContentType == "audio/mpeg"){
+                status = collection.UploadFile(formFile, Uploaderid);
+            }
+        }   
         return status;
     }
 
