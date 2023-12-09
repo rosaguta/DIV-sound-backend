@@ -227,38 +227,27 @@ public class AudiofileDal : IAudiofileDal
 
     private string GetFTPServer()
     {
-        var jsonObject = GetAppsettings();
-        var ftpserver = (string?)jsonObject["ConnectionStrings"]["ftpServer"];
-        return ftpserver;
+        return Environment.GetEnvironmentVariable("ftpServer");
     }
 
     private string GetFTPUsername()
     {
-        var jsonObject = GetAppsettings();
-        var ftpusername = (string?)jsonObject["ConnectionStrings"]["ftpUsername"];
-        return ftpusername;
+        return Environment.GetEnvironmentVariable("ftpUsername");
     }
 
     private string GetFTPPassword()
     {
-        var jsonObject = GetAppsettings();
-        var ftppassword = (string?)jsonObject["ConnectionStrings"]["ftpPassword"];
-        return ftppassword;
+        return Environment.GetEnvironmentVariable("ftpPassword");
     }
 
     private string? Getconnectionstring()
     {
-        var jsonfile = "appsettings.json";
-        var jsonObject = (JsonObject?)JsonNode.Parse(File.ReadAllText(jsonfile));
-        var sqlservervalue = (string?)jsonObject["ConnectionStrings"]["SqlServer"];
-        return sqlservervalue;
+        return Environment.GetEnvironmentVariable("SqlServer");
     }
 
     private string? GetFTPPath()
     {
-        var jsonObject = GetAppsettings();
-        var ftppath = (string?)jsonObject["ConnectionStrings"]["ftpPath"];
-        return ftppath;
+        return Environment.GetEnvironmentVariable("ftpPath");
     
     }
 
@@ -270,7 +259,7 @@ public class AudiofileDal : IAudiofileDal
             try
             {
                 // Execute custom FTP command
-                client.Execute($"SITE CHMOD 604 files/{uploaderid}/{file.FileName}");
+                client.Execute($"SITE CHMOD 604 {GetFTPPath()}/{uploaderid}/{file.FileName}");
                 Console.WriteLine("Custom FTP command executed successfully.");
             }
             catch (FtpCommandException ex)
@@ -293,7 +282,7 @@ public class AudiofileDal : IAudiofileDal
             try
             {
                 // Execute custom FTP command
-                client.Execute($"SITE CHMOD 705 files/{uploaderid}");
+                client.Execute($"SITE CHMOD 705 {GetFTPPath()}/{uploaderid}");
                 Console.WriteLine("Custom FTP command executed successfully.");
             }
             catch (FtpCommandException ex)

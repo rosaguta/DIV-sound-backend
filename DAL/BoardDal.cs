@@ -241,9 +241,6 @@ public class BoardDal : IBoardDal
     }
     private string? Getconnectionstring()
     {
-        var jsonfile = "appsettings.json";
-        var jsonObject = (JsonObject?)JsonNode.Parse(File.ReadAllText(jsonfile));
-        var sqlservervalue = (string?)jsonObject["ConnectionStrings"]["SqlServer"];
-        return sqlservervalue;
+        return Environment.GetEnvironmentVariable("SqlServer");
     }
 }
