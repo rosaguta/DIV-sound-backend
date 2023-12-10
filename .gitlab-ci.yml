@@ -1,0 +1,77 @@
+stages:
+  - build
+  - merge
+  - final_test
+
+
+test:
+  tags:
+    - backend
+  stage: build
+  script:
+    - dotnet test 
+  only:
+    - master
+  image: mcr.microsoft.com/dotnet/nightly/sdk:7.0
+
+build:
+  tags:
+    - backend
+  image: docker:20.10.16
+  stage: build
+  services:
+    - docker:20.10.16-dind
+  script:
+    - echo "dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo" | docker login $DOCKERHUB_URL -u digitalroseuwu --password-stdin
+    # - docker login $DOCKERHUB_URL -u digitalroseuwu-p dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo
+    - docker build . -t digitalroseuwu/div-sound-backend:latest -f ./DIV-SOUND-backend/Dockerfile
+    - docker push digitalroseuwu/div-sound-backend:latest
+  only:
+    - master
+  needs:
+    - test
+
+push_to_main:
+  tags:
+    - backend
+  stage: merge
+  script:
+    - apk update
+    - apk add git
+    - git config --global user.email "rvleeuwen@DigitalIndividuals.com"
+    - git config --global user.name "Rose van Leeuwen"
+    - cd $TMPDIR || exit 1
+    - pat="YOUR_PAT_HERE"
+    - credentials=$(echo -n ":$pat" | base64)
+    - git clone https://r.vanleeuwen:glpat-jShPpr5qPgUc4zso_SN1@git.digitalindividuals.com/rvleeuwen/div-sound-backend.git || exit 1
+    - cd div-sound-backend || exit 1
+    - git branch
+    - echo "$CI_COMMIT_MESSAGE"
+    - echo "merging from Development to main"
+    - git pull -a
+    - git merge origin/master -X theirs -m "$CI_COMMIT_MESSAGE"
+    - git push origin main
+    - echo $mergeMessage
+  only:
+    - master
+  needs:
+    - build
+
+main_test:
+  tags:
+    - backend
+  stage: final_test
+  only:
+    - main
+  script:
+    - apt-get update
+    - apt-get install -y openjdk-21-jdk
+    - ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+    - ENV PATH $PATH:$JAVA_HOME/bin
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - dotnet tool install --global dotnet-sonarscanner
+    - export SONAR_TOKEN=0ee26b65d77314b8c278ecd08863e68764f6a247
+    - dotnet sonarscanner begin /o:digitialindividuals /k:digitialindividuals_digitialindividuals /d:sonar.host.url=https://sonarcloud.io
+    - dotnet test
+    - dotnet sonarscanner end
+  image: mcr.microsoft.com/dotnet/nightly/sdk:7.0
