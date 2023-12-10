@@ -15,7 +15,7 @@ public class IntegrationTests
     [SetUp]
     public void Setup()
     {
-        Environment.SetEnvironmentVariable("SqlServer","Server=138.201.52.251;port=33265;Database=DIVSOUND;User Id=Rose;Password=DIVSound321!");
+        Environment.SetEnvironmentVariable("SqlServer","Server=138.201.52.251;port=33265;Database=DIVSOUNDTEST;User Id=Rose;Password=DIVSound321!");
         Environment.SetEnvironmentVariable("ftpServer", "ftp://138.201.52.251");
         Environment.SetEnvironmentVariable("ftpUsername", "devops");
         Environment.SetEnvironmentVariable("ftpPassword", "tar2pCuBYEd8APVmjvgG");
