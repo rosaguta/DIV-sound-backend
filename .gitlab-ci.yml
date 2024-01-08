@@ -65,7 +65,7 @@ docker:
     services:
     - docker:20.10.16-dind
     script:
-    - echo "dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo" | docker login $DOCKERHUB_URL -u digitalroseuwu --password-stdin
+    - echo "dckr_pat_msZinFou3fL6vvepQjqkFRpiUIw" | docker login $DOCKERHUB_URL -u digitalroseuwu --password-stdin
     # - docker login $DOCKERHUB_URL -u digitalroseuwu-p dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo
     - docker build . -t digitalroseuwu/div-sound-backend:latest -f ./DIV-SOUND-backend/Dockerfile
     - docker push digitalroseuwu/div-sound-backend:latest
