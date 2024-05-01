@@ -28,7 +28,7 @@ push_to_main:
     - cd $TMPDIR || exit 1
     - pat="YOUR_PAT_HERE"
     - credentials=$(echo -n ":$pat" | base64)
-    - git clone https://r.vanleeuwen:glpat-jShPpr5qPgUc4zso_SN1@git.digitalindividuals.com/rvleeuwen/div-sound-backend.git || exit 1
+    - git clone https://r.vanleeuwen:SECRET@git.digitalindividuals.com/rvleeuwen/div-sound-backend.git || exit 1
     - cd div-sound-backend || exit 1
     - git branch
     - echo "$CI_COMMIT_MESSAGE"
@@ -51,7 +51,7 @@ main_test:
   script:
     - export PATH="$PATH:/root/.dotnet/tools"
     - dotnet tool install --global dotnet-sonarscanner
-    - export SONAR_TOKEN=0ee26b65d77314b8c278ecd08863e68764f6a247
+    - export SONAR_TOKEN=SECRET
     - dotnet sonarscanner begin /o:digitialindividuals /k:digitialindividuals_digitialindividuals /d:sonar.host.url=https://sonarcloud.io
     - dotnet test
     - dotnet sonarscanner end
@@ -65,7 +65,7 @@ docker:
     services:
     - docker:20.10.16-dind
     script:
-    - echo "dckr_pat_msZinFou3fL6vvepQjqkFRpiUIw" | docker login $DOCKERHUB_URL -u digitalroseuwu --password-stdin
+    - echo "SECRET" | docker login $DOCKERHUB_URL -u digitalroseuwu --password-stdin
     # - docker login $DOCKERHUB_URL -u digitalroseuwu-p dckr_pat_OjU46U862sGLHCGEEYw6StC5zDo
     - docker build . -t digitalroseuwu/div-sound-backend:latest -f ./DIV-SOUND-backend/Dockerfile
     - docker push digitalroseuwu/div-sound-backend:latest
